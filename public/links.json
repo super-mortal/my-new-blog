@@ -1,0 +1,39 @@
+{
+  "friends": [
+    {
+      "id_name": "cf-links",
+      "desc": "Common links included in circle friends",
+      "link_list": [
+        {
+          "name": "mortal",
+          "intro": "mortal , 一个在数字世界中默默无闻的凡人",
+          "link": "https://supermortal.top",
+          "avatar": "https://q1.qlogo.cn/g?b=qq&nk=2169702639&s=640"
+        },
+        {
+          "name": "夏夜流萤",
+          "intro": "飞萤之火自无梦的长夜亮起，绽放在终竟的明天。",
+          "link": "https://blog.cuteleaf.cn",
+          "avatar": "https://q1.qlogo.cn/g?b=qq&nk=7618557&s=640"
+        }
+      ]
+    },
+    {
+      "id_name": "inactive-links",
+      "desc": "Inactive or rule-breaking friends",
+      "link_list": []
+    },
+    {
+      "id_name": "special-links",
+      "desc": "Other special links",
+      "link_list": [
+        {
+          "name": "mortal",
+          "intro": "mortal , 一个在数字世界中默默无闻的凡人",
+          "link": "https://supermortal.top",
+          "avatar": "https://q1.qlogo.cn/g?b=qq&nk=2169702639&s=640"
+        }
+      ]
+    }
+  ]
+}

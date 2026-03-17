@@ -1,0 +1,35 @@
+/* 自定义目录标题 */
+.toc-title::before {
+  content: "目录" !important;
+}
+
+/* 备用方案：如果上面的选择器不对，尝试这些 */
+.toc h2::before {
+  content: "目录" !important;
+}
+
+.toc-header::before {
+  content: "目录" !important;
+}
+
+.sidebar-toc h2::before {
+  content: "目录" !important;
+}
+
+/* 如果需要隐藏原来的英文标题 */
+.toc-title,
+.toc h2,
+.toc-header,
+.sidebar-toc h2 {
+  text-indent: -9999px;
+  position: relative;
+}
+
+.toc-title::before,
+.toc h2::before,
+.toc-header::before,
+.sidebar-toc h2::before {
+  position: absolute;
+  left: 0;
+  text-indent: 0;
+}

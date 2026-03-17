@@ -1,0 +1,61 @@
+---
+import links from 'public/links.json'
+
+import { Collapse, Timeline } from 'astro-pure/user'
+import config from 'virtual:config'
+import PageLayout from '@/layouts/CommonPage.astro'
+import FriendList from '@/components/links/FriendList.astro'
+
+const headings = [
+  { depth: 2, slug: 'common-links', text: '普通友链' },
+  { depth: 2, slug: 'special-links', text: '特殊链接' },
+  { depth: 2, slug: 'apply-links', text: '申请友链' }
+]
+
+const { friends } = links
+const linksConf = config.integ.links
+const linkEditPage = 'https://github.com/cworld1/astro-theme-pure/blob/main/public/links.json'
+---
+
+<PageLayout title='Links' {headings} comment>
+  <p>这里是我的朋友们，欢迎互相访问交流</p>
+  <h2 id='common-links'>我的朋友</h2>
+  <FriendList list={friends[0]} />
+  <Collapse title='失效友链'>
+    <FriendList list={friends[1]} />
+  </Collapse>
+  <Collapse title='友链历史记录'>
+    <Timeline events={linksConf.logbook} />
+  </Collapse>
+  <h2 id='special-links'>特殊链接</h2>
+  <FriendList list={friends[2]} />
+
+  <h2 id='apply-links'>申请友链</h2>
+  <p>申请友链前请先在自己网站添加本站友链，请使用以下信息：（点击复制）：</p>
+  <blockquote class='not-prose grid grid-cols-[auto_1fr] gap-x-2 break-words border-s-4 ps-4'>
+    {
+      linksConf.applyTip.map(({ name, val }) => {
+        const script = `navigator.clipboard.writeText('${val}');document.dispatchEvent(new CustomEvent('toast',{detail:{message:'Copied "${val}" to clipboard!'}}))`
+        return (
+          <>
+            <span class='text-end'>{name}:</span>
+            <samp class='cursor-pointer' onclick={script}>
+              {val}
+            </samp>
+          </>
+        )
+      })
+    }
+  </blockquote>
+
+  <p>
+    申请友链：请将您的网站信息发送邮件至：2169702639@qq.com  申请说明：
+  </p>
+  <ul>
+    <li>网站内容积极向上，符合国家法律，无违法违规信息</li>
+    <li>不允许含有病毒、木马、恶意代码、弹出广告以及任何危害他人计算机安全的内容</li>
+    <li>不能有任何含色情/反动/暴力等不法内容</li>
+    <li>网站能够正常访问，加载速度合理</li>
+    <li>网站支持HTTPS访问，以原创内容为主，非纯采集站</li>
+  </ul>
+</PageLayout>

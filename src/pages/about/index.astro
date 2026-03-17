@@ -1,0 +1,83 @@
+---
+import { Button, Spoiler, Timeline } from 'astro-pure/user'
+import PageLayout from '@/layouts/CommonPage.astro'
+
+const headings = [
+  { depth: 2, slug: 'hobbies', text: '目标' },
+  { depth: 2, slug: 'about-blog', text: '关于博客' }
+]
+---
+
+<PageLayout title='About' {headings} comment>
+  <p>学生 / 开发者</p>
+  <p>
+  你好，我是mortal，现在在广州的大学学习软件技术专业，我是一名技术爱好者<br>
+  喜欢动手体验新事物，尤其2026年爆火的openclaw，我极感兴趣<br>
+  我拥有node.js+Vue做全栈开发的经历，积累了一点软件开发经验，我对网络安全等方面也比较感兴趣，我将不断学习新知识，迎接新挑战
+  </p>
+
+  {/* general-talk */}
+  <h2 id='hobbies'>目标</h2>
+  <ul>
+    <li>
+      <b>拓宽技术纵深：</b>学习更多前端交互到后端逻辑，打通前后端技术栈。
+    </li>
+    <li>
+      <b>紧跟时代步伐：</b>学习更多的AI 开发技巧，了解更多的openclaw玩法.
+    </li>
+    <li>
+      <b>持续积累落地：</b>每天都能在代码量和项目经验上有所沉淀，稳步构建属于自己的技术体系。
+    </li>
+  </ul>
+
+
+  {/* about-blog */}
+  <h2 id='about-blog'>关于博客</h2>
+  <p>博客历史:</p>
+  <Timeline
+    events={[
+      {
+        date: '2026-03-17',
+        content:
+          '新博客成立，使用Astro框架astro-theme-pure模板构建'
+      },
+      {
+        date: '2026-01-28',
+        content:
+          '博客迁移重构，使用Astro框架Firefly模板重新构建'
+      },
+      {
+        date: '2025-11-24',
+        content: '博客正式成立，使用typecho框架的wayxz主题构建'
+      }
+    ]}
+  />
+  <p>
+    网站的顺畅运营和个性化定制也依赖于资源和 以下优秀项目/服务提供商提供技术支持：
+  </p>
+  <ul>
+    <li>
+      框架和主题: <a href='https://astro.build/' target='_blank'>Astro</a> + <a
+        href='https://github.com/cworld1/astro-theme-pure'
+        target='_blank'>Astro Theme Pure</a
+      >
+    </li>
+    <li>
+      部署和托管: <a href='https://vercel.com/' target='_blank'>Vercel</a>
+    </li>
+  {/*  <li>
+      CI/CD: <a href='https://vercel.com/workflow' target='_blank'>Vercel Workflow</a>
+    </li>
+    <li>Comment system: <a href='https://waline.js.org' target='_blank'>Waline</a></li>
+    <li>
+      Visits: <a href='https://supabase.com/' target='_blank'>Supabase</a> +
+      <a href='https://waline.js.org/' target='_blank'>Waline</a>
+    </li>
+    <li>
+      Other statistics: <a href='https://github.com/spencerwooo/substats' target='_blank'
+        >Substats</a
+      >
+    </li>
+  */}
+  </ul>
+</PageLayout>
