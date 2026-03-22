@@ -38,7 +38,7 @@ export const theme: ThemeUserConfig = {
   head: [
     {
       tag: 'meta',
-      attrs: { name: 'keywords', content: '博客,技术,编程,前端,后端,开发' },
+      attrs: { name: 'keywords', content: '博客,技术,编程,前端,后端,开发,超级凡人,supermortal' },
       content: ''
     }
   ],
@@ -132,7 +132,7 @@ export const integ: IntegrationUserConfig = {
     // target: `(data) => data[0].content || 'Error'`
     // - DummyJSON
     server: 'https://v1.hitokoto.cn/?c=i',
-  target: `(data) => (data.hitokoto || 'Error')`
+    target: `(data) => (data.hitokoto || 'Error')`
   },
   // [Typography]
   // https://unocss.dev/presets/typography
