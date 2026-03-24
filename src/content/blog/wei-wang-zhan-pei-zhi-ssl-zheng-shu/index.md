@@ -128,7 +128,41 @@ mkdir -p /usr/local/nginx/conf/ssl/yourdomain.com
   --reloadcmd "nginx -s reload"
 ```
 
-## 四.测试并生效
+## 四.证书到期更新
+
+> Let's Encrypt 的免费证书有效期是 **90 天**。安装的时候设置了`--reloadcmd`所以acme.sh 会在证书到期前 **30 天**自动续期，所以一般情况下不需要手动操作,安装时候就会自动设置定时任务每天检查
+
+1. 确认自动续期已配置
+
+```markdown
+# 终端执行命令
+crontab -l | grep acme.sh
+
+# 正常输出，这是每天13点02分自动执行
+2 13 * * * "/root/.acme.sh"/acme.sh --cron --home "/root/.acme.sh" > /dev/null
+```
+
+2. 查看证书到期时间
+
+```markdown
+# 查看所有证书
+/root/.acme.sh/acme.sh --list
+
+# 查看单个证书详情
+/root/.acme.sh/acme.sh --info -d 你的域名
+```
+
+3. 如果没有正确设置到定时任务自动续期，可以手动续期
+
+```markdown
+# 强制续期（忽略是否到期）
+/root/.acme.sh/acme.sh --renew -d 你的域名 --force
+
+# 手动续期所有证书
+/root/.acme.sh/acme.sh --cron --home "/root/.acme.sh"
+```
+
+## 五.测试并生效
 
 1. 测试配置
 
@@ -149,7 +183,7 @@ nginx: configuration file /usr/local/nginx/conf/nginx.conf test is successful
 /usr/local/nginx/sbin/nginx -s reload
 ```
 
-## 五.多个项目如何确保网站不互串
+## 六.多个项目如何确保网站不互串
 
 1. 检查现有配置
 
@@ -194,7 +228,7 @@ nano /usr/local/nginx/conf/conf.d/实际域名.conf
 /usr/local/nginx/sbin/nginx -t && /usr/local/nginx/sbin/nginx -s reload
 ```
 
-## 六.常见问题
+## 七.常见问题
 
 ### Q: 申请证书报错 "Can't find directory"
 
