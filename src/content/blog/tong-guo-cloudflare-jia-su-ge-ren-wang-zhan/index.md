@@ -1,7 +1,7 @@
 ---
 title: '通过Cloudflare加速个人网站'
 publishDate: 2026-03-31
-description: '通过Cloudflare的免费计划，提供个人网站的加载速度提升体验感'
+description: '通过Cloudflare的免费计划，提高个人网站的加载速度，提升体验感'
 tags:
   - 建站
   - 教程
