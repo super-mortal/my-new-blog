@@ -4,7 +4,7 @@ publishDate: 2026-04-06
 description: '入门到精通，AI编程核心术语全解析'
 tags:
   - AI
-  -知识点
+  - 知识点
 language: '中文'
 ---
 
