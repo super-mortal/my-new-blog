@@ -6,11 +6,6 @@ tags:
   - Markdown
   - 教程
 language: '中文'
-heroImage:
-  src: './fengmian.png'
-  alt: '封面图'
-  inferSize: true
-  color: '#3d9987'
 ---
 
 # Markdown 进阶语法
