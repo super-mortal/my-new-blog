@@ -7,11 +7,6 @@ tags:
   - 知识点
   - 运维
 language: '中文'
-heroImage:
-  src: './fengmian.png'
-  alt: '封面图'
-  inferSize: true
-  color: '#6d86ac'
 ---
 
 # 理解服务器中的Nginx

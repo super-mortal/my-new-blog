@@ -6,11 +6,6 @@ tags:
   - 建站
   - 教程
 language: '中文'
-heroImage:
-  src: './fengmian.png'
-  alt: '封面图'
-  inferSize: true
-  color: '#5165b3'
 ---
 
 # 通过Cloudflare加速个人网站

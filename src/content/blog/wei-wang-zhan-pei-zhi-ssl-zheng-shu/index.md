@@ -8,9 +8,6 @@ tags:
   - 教程
 language: '中文'
 heroImage:
-  src: './fengmian.png'
-  alt: '封面图'
-  inferSize: true
   color: '#b37651'
 ---
 
@@ -136,19 +133,23 @@ mkdir -p /usr/local/nginx/conf/ssl/yourdomain.com
 
 ```markdown
 # 终端执行命令
+
 crontab -l | grep acme.sh
 
 # 正常输出，这是每天13点02分自动执行
-2 13 * * * "/root/.acme.sh"/acme.sh --cron --home "/root/.acme.sh" > /dev/null
+
+2 13 \* \* \* "/root/.acme.sh"/acme.sh --cron --home "/root/.acme.sh" > /dev/null
 ```
 
 2. 查看证书到期时间
 
 ```markdown
 # 查看所有证书
+
 /root/.acme.sh/acme.sh --list
 
 # 查看单个证书详情
+
 /root/.acme.sh/acme.sh --info -d 你的域名
 ```
 
@@ -156,9 +157,11 @@ crontab -l | grep acme.sh
 
 ```markdown
 # 强制续期（忽略是否到期）
+
 /root/.acme.sh/acme.sh --renew -d 你的域名 --force
 
 # 手动续期所有证书
+
 /root/.acme.sh/acme.sh --cron --home "/root/.acme.sh"
 ```
 

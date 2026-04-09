@@ -6,11 +6,6 @@ tags:
   - OpenClaw
   - 教程
 language: '中文'
-heroImage:
-  src: './fengmian.png'
-  alt: '封面图'
-  inferSize: true
-  color: '#e24747'
 ---
 
 # 云服务器手动部署OpenClaw指南
