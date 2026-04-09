@@ -3,7 +3,7 @@ title: '我的第一篇博客'
 publishDate: 2026-03-17
 description: '我的第一篇博客新的博客诞生'
 tags:
-- 建站
+  - 建站
 language: '中文'
 heroImage:
   src: './fengmian.png'

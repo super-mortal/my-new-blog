@@ -460,7 +460,9 @@ description: React 组件开发规范
 globs: src/components/**/*.tsx
 alwaysApply: false
 ---
+
 # React 规范
+
 - 使用函数式组件
 - 优先使用 hooks
 ```
@@ -488,11 +490,13 @@ alwaysApply: false
 
 ```markdown
 # 项目设置
+
 - 安装依赖：npm install
 - 启动开发：npm run dev
 - 运行测试：npm test
 
 # 代码规范
+
 - 使用 TypeScript 严格模式
 - 组件文件使用 PascalCase 命名
 - 工具函数使用 camelCase 命名

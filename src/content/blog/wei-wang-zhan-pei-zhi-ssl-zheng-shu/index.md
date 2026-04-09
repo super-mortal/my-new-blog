@@ -7,8 +7,6 @@ tags:
   - 运维
   - 教程
 language: '中文'
-heroImage:
-  color: '#b37651'
 ---
 
 # 为网站配置SSL证书
