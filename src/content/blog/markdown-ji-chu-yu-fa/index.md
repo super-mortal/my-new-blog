@@ -7,7 +7,7 @@ tags:
   - 教程
 language: '中文'
 heroImage:
-  src: 'https://supermortal.cn/fengmian.png'
+  src: './fengmian.png'
   alt: '封面图'
   inferSize: true
   color: '#3d9943'
