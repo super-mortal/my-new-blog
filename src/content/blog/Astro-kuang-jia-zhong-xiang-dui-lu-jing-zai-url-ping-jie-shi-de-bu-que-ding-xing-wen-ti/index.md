@@ -69,7 +69,7 @@ const socialImageURL = new URL(ogImage ? ogImage : config.socialCard, Astro.url)
 - 如果 `Astro.url` 是 `http://localhost`，结果就是 `http://localhost/images/social-card.png`
 - 如果 `Astro.url` 是 `https://supermortal.cn`，结果就是 `https://supermortal.cn/images/social-card.png`
 
-## 解决方案
+## 三.解决方案
 
 **使用绝对 URL**
 
@@ -79,17 +79,25 @@ const socialImageURL = new URL(ogImage ? ogImage : config.socialCard, Astro.url)
 socialCard: 'https://supermortal.cn/images/social-card.png'
 ```
 
-## 问题根源总结
+> **修改之后可以看到爬虫正确抓取了我的博客信息，同时QQ分享链接时也正确显示了元数据信息**
+
+![02](./02.png)
+
+> **未修改之前无法正确抓取只能显示如下图所示的纯链接**
+
+![03](./03.png)
+
+## 四.问题根源总结
 
 1. **配置分离的问题**：`astro.config.ts` 的 `site` 配置和运行时的 `Astro.url` 是两个不同的概念
 2. **URL 拼接的不确定性**：`new URL(相对路径, Astro.url)` 依赖于 `Astro.url` 的实际值，不可控
 3. **开发环境与爬虫环境的差异**：本地开发和爬虫访问的 URL 环境可能不同
 
-## 经验踩坑
+## 五.经验踩坑
 
 ### 踩到的坑 1：相对路径在某些环境下失效
 
-最初使用相对路径 `/images/social-card.png` 是考虑到：
+最初使用相对路径 `/images/social-card.png` 是因为：
 
 - 静态资源部署简单
 - 不需要关心域名变化
