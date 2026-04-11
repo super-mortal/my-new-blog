@@ -15,7 +15,7 @@ const languages = ['Html', 'JavaScript', 'CSS', 'Java']
 const frontend = ['TypeScript', 'Vite', 'Vue']
 const backend = ['Node.js', 'Express', 'PostgreSQL', 'Redis']
 
-const MAX_POSTS = 6
+const MAX_POSTS = 8
 const allPosts = await getBlogCollection()
 const allPostsByDate = sortMDByDate(allPosts).slice(0, MAX_POSTS)
 
