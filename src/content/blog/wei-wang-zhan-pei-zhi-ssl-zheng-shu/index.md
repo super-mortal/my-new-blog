@@ -1,7 +1,6 @@
 ---
 title: '为网站配置SSL证书'
 publishDate: 2026-03-24
-updatedDate: 2026-04-11
 description: '同一服务器部署两个及以上的项目时，手动为每个域名申请SSL证书，避免配置信息错误，Nginx无法正确处理域名分流，导致的后部署的项目无法正确访问的问题'
 tags:
   - 服务器
@@ -234,20 +233,39 @@ nano /usr/local/nginx/conf/conf.d/实际域名.conf
 
 > 整个流程相对来说不是很复杂不是很麻烦，但为了更加方便，我写了一键部署脚本，前提是nginx是通过编译安装的，当然里面也包含了一键安装nginx的脚本，目前已经开源，开源地址[vps_tools](https://github.com/super-mortal/vps_tools)
 
-### 使用方法
+### 1.使用方法
 
 ```markdown
 # 克隆仓库
+
 git clone https://github.com/super-mortal/vps_tools.git
 
 # 进入目录
+
 cd vps_tools
 
 # 给脚本添加执行权限
+
 chmod +x ssl_cert.sh
 
 # 运行交互式脚本
+
 ./ssl_cert.sh
+```
+
+### 2.注意事项
+
+```markdown
+# 先确认 443 端口真的是 Nginx 在监听
+ss -tulnp | grep 443
+# 查看 ufw 状态（Debian/Ubuntu）
+ufw status
+# 放行443端口（TCP协议，HTTPS标准端口）
+ufw allow 443/tcp
+# 重载防火墙规则，使配置生效
+ufw reload
+# 再次验证规则是否添加成功
+ufw status
 ```
 
 ## 八.常见问题
