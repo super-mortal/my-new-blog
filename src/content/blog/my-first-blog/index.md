@@ -1,15 +1,10 @@
 ---
 title: '我的第一篇博客'
 publishDate: 2026-03-17
-description: '我的第一篇博客新的博客诞生'
+description: '我的第一篇博客新的博客诞生——不必借光而行，你我亦是星辰'
 tags:
   - 建站
 language: '中文'
-heroImage:
-  src: './fengmian.png'
-  alt: '封面图'
-  inferSize: true
-  color: '#99773d'
 ---
 
 # 关于我的博客
