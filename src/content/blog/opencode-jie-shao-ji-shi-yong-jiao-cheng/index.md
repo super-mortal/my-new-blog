@@ -1,5 +1,5 @@
 ---
-title: 'OpenCode 介绍和使用教程'
+title: 'OpenCode 介绍及使用教程'
 publishDate: 2026-04-21
 description: '本文介绍了什么是 OpenCode 以及如何使用 OpenCode，详细说明了如何自定义模型'
 tags:
