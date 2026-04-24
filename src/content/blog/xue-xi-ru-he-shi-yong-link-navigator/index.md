@@ -1,7 +1,7 @@
 ---
 title: '学习如何使用Link-Navigator'
 publishDate: 2026-04-10
-description: 'Link-Navigator是一个自托管书签管理系统，用于保存、分类、搜索和整理网页链接，本文介绍了如何使用Link-Navigator，以及简单的发展规划'
+description: 'Link-Navigator是一个自托管书签管理系统，用于保存、分类、搜索和整理网页链接，由 mortal 基于开源项目二次开发，本文介绍了如何使用Link-Navigator，以及简单的发展规划'
 tags:
   - 开源项目
   - 教程
