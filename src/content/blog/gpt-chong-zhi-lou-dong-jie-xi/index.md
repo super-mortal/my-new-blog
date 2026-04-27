@@ -1,4 +1,13 @@
-# GPT 充值漏洞解析 
+---
+title: 'GPT 充值漏洞解析'
+publishDate: 2026-04-27
+description: '讲述近期 OpenAI 的内购收据验证漏洞导致的无限充值 GPT 会员原理，本文仅作为技术学习参考，禁止商用牟利'
+tags:
+  - AI
+language: '中文'
+---
+
+# GPT 充值漏洞解析
 
 > 最近这段时间，网络上各种 GPT Plus 和 Pro 的代充层出不穷，并且只需要15-30块，可要知道官方充值 Plus 需要20刀，而 Pro 更是高达200刀，更离谱的是，部分不良商家 Plus 代充更是需要100-120块。多数人只看到低价优势，却不了解背后的核心原理：这类低价代充，本质是利用了 OpenAI iOS 内购的收据验证漏洞，本文仅从理论上进行实操讲解，仅作为技术学习参考，禁止商用牟利
 
@@ -39,10 +48,8 @@
 
 - 环境：确保电脑已安装 Python（3\.7 及以上版本），打开终端/命令提示符，输入 `python -version` 验证是否安装成功
 
-
 - 硬件：一台 iPhone/iPad（用于购买内购、抓包）和一台电脑（用于运行抓包工具）
 - 软件：抓包工具二选一（Charles 简单易上手，适合新手；mitmproxy 适合开发者，跨平台）
-
 
 - 安装命令：在终端输入 `pip install mitmproxy`，等待安装完成（Mac/Linux 可能需要用 `pip3` 替代 `pip`）
 - 验证安装：输入 `mitmproxy`，若终端出现 mitmproxy 交互界面，即安装成功
@@ -55,7 +62,7 @@
 1. 配置手机代理：电脑和手机连接同一个 WiFi，打开 Charles，查看电脑的局域网 IP；打开 iPhone，进入 WiFi 设置，点击已连接的 WiFi，选择“配置代理”，输入电脑 IP 和默认端口号
 2. 安装信任证书：手机浏览器打开地址 chls\.pro/ssl，下载并安装 Charles 根证书；进入手机设置 → 通用 → 证书信任设置，完全信任该证书（目的是解密 HTTPS 流量，否则无法看到加密的收据数据）
 3. 购买内购并抓包：手机登录土耳其区 App Store，打开官方 ChatGPT iOS 客户端，进入升级 Plus 页面，完成付款（土耳其区价格 499 里拉，约 85 元）；付款瞬间，在 Charles 中过滤域名 chatgpt.com，找到 POST 请求 /backend\-api/subscription/upgrade
-4. 导出收据：点开该请求的 Request Body，会看到一段 JSON 数据，其中 \&\#34;receipt\_data\&\#34; 对应的长串 base64 字符串，就是苹果内购收据，全选复制，保存到记事本即可——这条收据是 **加密二进制 + base64** 永久有效，可无限复用
+4. 导出收据：点开该请求的 Request Body，会看到一段 JSON 数据，其中 \&\#34;receipt_data\&\#34; 对应的长串 base64 字符串，就是苹果内购收据，全选复制，保存到记事本即可——这条收据是 **加密二进制 + base64** 永久有效，可无限复用
 
 补充：除了 Charles，也可以用 mitmproxy 抓包，操作逻辑一致：启动 mitmproxy 后，配置手机代理（IP 为电脑 IP，端口默认 8080），安装 mitmproxy 根证书，购买内购后，在 mitmproxy 终端找到对应请求，提取 **receipt\-data** 即可，抓包核心是“拦截 ChatGPT 向 OpenAI 提交收据的请求”，两种工具均可实现
 
