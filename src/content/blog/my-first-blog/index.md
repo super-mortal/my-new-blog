@@ -1,7 +1,7 @@
 ---
 title: '我的第一篇博客'
 publishDate: 2026-03-17
-description: '我的第一篇博客新的博客诞生——不必借光而行，你我亦是星辰'
+description: '我的第一篇博客诞生——不必借光而行，你我亦是星辰'
 tags:
   - 建站
 language: '中文'

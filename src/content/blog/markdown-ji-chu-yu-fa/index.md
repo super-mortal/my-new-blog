@@ -6,11 +6,6 @@ tags:
   - Markdown
   - 教程
 language: '中文'
-heroImage:
-  src: './fengmian.png'
-  alt: '封面图'
-  inferSize: true
-  color: '#3d9943'
 ---
 
 # Markdown基础语法
@@ -115,13 +110,13 @@ Markdown是一种轻量级标记语言，排版语法简洁，让人们更多地
 
 使用三个反引号包裹，并可指定语言：
 
-```markdown
+````markdown
 ​`javascript
 function hello() {
   console.log('Hello!');
 }
 ​`
-```
+````
 
 ## 七. 分隔线
 
