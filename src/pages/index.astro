@@ -15,7 +15,7 @@ const languages = ['Html', 'JavaScript', 'CSS', 'Java']
 const frontend = ['TypeScript', 'Vite', 'Vue']
 const backend = ['Node.js', 'Express', 'PostgreSQL', 'Redis']
 
-const MAX_POSTS = 8
+const MAX_POSTS = 10
 const allPosts = await getBlogCollection()
 const allPostsByDate = sortMDByDate(allPosts).slice(0, MAX_POSTS)
 
@@ -70,13 +70,14 @@ if (!images[imagePath])
       <Section title='About'>
         <p class='text-muted-foreground'>Student / Developer</p>
         <p class='text-muted-foreground'>
-          Hello, I'm Mortal. I'm currently studying Software Technology at a university in
-          Guangzhou.<br />
-          I'm a tech enthusiast who loves hands-on experiences with new things, and I'm especially fascinated
-          by OpenClaw, which became hugely popular in 2026. <br />I have experience in full-stack
-          development using Node.js and Vue, which has helped me build some software development
-          skills. I'm also quite interested in areas like cybersecurity, and i will learning new
-          knowledge and embracing new challenges.
+          Hello, I'm Mortal. I come from Zhanjiang, Guangdong, and I'm currently majoring in
+          Software Technology at a university in Guangzhou.<br />
+          I'm an enthusiastic tech lover who enjoys hands-on practice and exploring new technologies.
+          I'm especially deeply interested in OpenClaw, which has gone viral in 2026.<br />I have
+          practical full-stack development experience with AI + Node.js + Vue, and have solidly
+          accumulated software development skills. Meanwhile, I also delve into VPS and
+          cybersecurity. I keep a passion for lifelong learning, and I will continue to polish my
+          technical ability, absorb new knowledge, and bravely embrace new challenges in the future.
         </p>
         <Button title='More about me' class='w-fit self-end' href='/about' variant='ahead' />
       </Section>

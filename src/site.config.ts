@@ -90,7 +90,7 @@ export const theme: ThemeUserConfig = {
       }
     },
     /** Blog page size for pagination (optional) */
-    blogPageSize: 10,
+    blogPageSize: 8,
     // Currently support weibo, x, bluesky
     share: []
   }
