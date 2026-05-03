@@ -9,91 +9,47 @@ A simple, fast and powerful blog & document theme built by Astro.
 [![GitHub Release](https://img.shields.io/github/v/release/cworld1/astro-theme-pure?include_prereleases&style=flat&label=template)](https://github.com/cworld1/astro-theme-pure/releases)
 [![GitHub License](https://img.shields.io/github/license/cworld1/astro-theme-pure?style=flat)](https://github.com/cworld1/astro-theme-pure/blob/main/LICENSE)
 
-![image](./.github/assets/header.webp)
-![image](./.github/assets/body.webp)
 
-> [!NOTE]
-> Known issues: 1. Header & customize options is still under development (template exposed still). 2. Theme template v4.0.5^ UnoCSS preset changed to PresetMini. If there's any problem, please report as issue.
 
-## Introduction
+# 🎉 Hi there!
 
-Checkout [Demo Site →](https://astro-pure.js.org/)
+Welcome to my homepage. Thanks for stopping by - I am happy to share my learning journey and projects with you.
 
-### :fire: Features
+------
 
-- [x] :rocket: Fast & high performance
-- [x] :star: Simple & clean design
-- [x] :iphone: Responsive design
-- [x] :mag: Full-site search built with [pagefind](https://pagefind.app/)
-- [x] :world_map: Sitemap & RSS feed
-- [x] :spider_web: SEO-friendly
-- [x] :book: TOC (table of contents)
-- [x] :framed_picture: Dynamic open graph generation for posts
-- [x] :framed_picture: Mediumzoom lightbox for images
+## 🌍 About Me
 
-### :package: Components
+I am a Software Technology student from China, passionate about building practical software and growing as a full-stack developer.
 
-Theme includes a lot of components, which can not only be used in the theme, but also in other astro projects.
+- 🤖 Experienced in AI-driven development and using AI tools to speed up coding, debugging, and product iteration
+- 🌱 Continuously improving my engineering fundamentals, architecture thinking, and project delivery skills
+- 🛠 Enjoy turning ideas into real applications with clean, maintainable code
+- 📫 Open to collaboration, learning, and interesting tech discussions
+- 🌐 Blog: [supermortal.cn](https://supermortal.cn)
+- ✉️ Email: [supermortal@163.com](mailto:supermortal@163.com)
 
-> For other astro projects, UnoCSS is required. See [Package README](https://github.com/cworld1/astro-theme-pure/blob/main/packages/pure/README.md#use-with-common-astro-project) for more details.
+------
 
-- Basic components: `Aside`, `Tabs`, `Timeline`, `Steps`, `Spoiler`...
-- Advanced components: `GithubCard`, `LinkPreview`, `Quote`, `QRCode`...
+## 🧰 Skills
 
-### :white_check_mark: Lighthouse score
+![HTML5](https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=html5&logoColor=white)
+![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black)
+![CSS3](https://img.shields.io/badge/CSS3-1572B6?style=for-the-badge&logo=css3&logoColor=white)
+![Java](https://img.shields.io/badge/Java-007396?style=for-the-badge&logo=openjdk&logoColor=white)
+![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?style=for-the-badge&logo=typescript&logoColor=white)
+![Linux](https://img.shields.io/badge/Linux-FCC624?style=for-the-badge&logo=linux&logoColor=black)
+![Python](https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white)
+![MySQL](https://img.shields.io/badge/MySQL-4479A1?style=for-the-badge&logo=mysql&logoColor=white)
+![MongoDB](https://img.shields.io/badge/MongoDB-47A248?style=for-the-badge&logo=mongodb&logoColor=white)
 
-[![lighthouse-score](./.github/assets/lighthouse-score.png)](https://pagespeed.web.dev/analysis/https-cworld-top/o229zrt5o4?form_factor=mobile&hl=en)
+------
 
-## Documentation
+## 🚀 Developer Activity
 
-[Docs](https://astro-pure.js.org/docs) | [Showcase](https://github.com/cworld1/astro-theme-pure/issues/10)
-
-## Package
-
-See [astro-theme-pure](https://www.npmjs.com/package/astro-pure) on npm.
-
-## Local development
-
-Environment requirements:
-
-- [Nodejs](https://nodejs.org/): 18.0.0+
-
-Clone the repository:
-
-```shell
-git clone https://github.com/cworld1/astro-theme-pure.git
-cd astro-theme-pure
-```
-
-Useful commands:
-
-```shell
-# Install dependencies
-bun install
-# Start the dev server
-bun dev
-# Build the project
-bun run build
-# Preview (after the build)
-bun preview
-# Create a new post
-bun pure new
-```
-
-## Contributions
-
-To spend more time coding and less time fiddling with whitespace, this project uses code conventions and styles to encourage consistency. Code with a consistent style is easier (and less error-prone!) to review, maintain, and understand.
+![Activity Graph](https://github-readme-activity-graph.vercel.app/graph?username=super-mortal&theme=github-compact)
 
 ## Thanks
 
 - [Astro Cactus](https://github.com/chrismwilliams/astro-theme-cactus)
 - [Astro Resume](https://github.com/srleom/astro-theme-resume)
 - [Starlight](https://github.com/withastro/starlight)
-
-Other third party references are on [Docs#Contributions](https://astro-pure.js.org/docs/advanced/about). Appreciate for all open source libraries.
-
-## License
-
-This project is licensed under the Apache 2.0 License.
-
-[![Star History Chart](https://api.star-history.com/svg?repos=cworld1/astro-theme-pure&type=Date)](https://star-history.com/#cworld1/astro-theme-pure&Date)
