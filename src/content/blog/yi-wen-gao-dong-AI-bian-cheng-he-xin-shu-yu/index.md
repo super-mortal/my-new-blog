@@ -179,7 +179,7 @@ language: '中文'
 - 定义 AI 智能体的规则文件也是 Markdown 格式
 - 包括我现在写的文章也是用Markdown 来写
 
-**学会 Markdown** 能让你更好地跟 AI 交流，也能写出更规范的项目文档。更重要的是，结构化的内容（标题层级、列表、代码块等）有助于 AI 更准确地理解你的意图，同时也能培养你自己的结构化思维能力，这对写好提示词非常有帮助，更多markdown语法查看我的往期文章[Markdown基础语法](https://supermortal.cn/blog/markdown-ji-chu-yu-fa)和[Markdown进阶语法](https://supermortal.cn/blog/markdown-jin-jie-yu-fa)
+**学会 Markdown** 能让你更好地跟 AI 交流，也能写出更规范的项目文档。更重要的是，结构化的内容（标题层级、列表、代码块等）有助于 AI 更准确地理解你的意图，同时也能培养你自己的结构化思维能力，这对写好提示词非常有帮助，更多markdown语法查看我的往期文章[Markdown基础语法](https://supermortal.cn/blog/markdown-ji-chu-yu-fa)
 
 ## AI 编程模式
 
