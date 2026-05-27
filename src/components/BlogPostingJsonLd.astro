@@ -1,0 +1,47 @@
+---
+interface Props {
+  title: string
+  description: string
+  slug: string
+  publishDate: Date
+  updatedDate?: Date
+  image?: string
+  author: string
+  siteName: string
+}
+
+const { title, description, slug, publishDate, updatedDate, image, author, siteName } = Astro.props
+
+const site = Astro.site ?? Astro.url
+const articleURL = new URL(`/blog/${slug}`, site).href
+const imageURL = image ? new URL(image, site).href : undefined
+const dateModified = updatedDate ?? publishDate
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'BlogPosting',
+  headline: title,
+  description,
+  datePublished: publishDate.toISOString(),
+  dateModified: dateModified.toISOString(),
+  author: {
+    '@type': 'Person',
+    name: author
+  },
+  publisher: {
+    '@type': 'Organization',
+    name: siteName,
+    logo: {
+      '@type': 'ImageObject',
+      url: new URL('/favicon/favicon-32x32.png', site).href
+    }
+  },
+  mainEntityOfPage: {
+    '@type': 'WebPage',
+    '@id': articleURL
+  },
+  ...(imageURL && { image: [imageURL] })
+}
+---
+
+<script is:inline type='application/ld+json' set:html={JSON.stringify(jsonLd)} />

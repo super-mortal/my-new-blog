@@ -8,6 +8,7 @@ import 'katex/dist/katex.min.css'
 import { MediumZoom } from 'astro-pure/advanced'
 import { ArticleBottom, Copyright, Hero, TOC } from 'astro-pure/components/pages'
 import config from 'virtual:config'
+import BlogPostingJsonLd from '@/components/BlogPostingJsonLd.astro'
 import PageLayout from '@/layouts/ContentLayout.astro'
 import { Comment, PageInfo } from '@/components/waline'
 
@@ -49,6 +50,17 @@ const primaryColor = data.heroImage?.color ?? 'hsl(var(--primary) / var(--un-tex
   highlightColor={primaryColor}
   back='/blog'
 >
+  <BlogPostingJsonLd
+    slot='head'
+    title={title}
+    description={description}
+    slug={id}
+    publishDate={publishDate}
+    updatedDate={updatedDate}
+    image={socialImage}
+    author={config.author}
+    siteName={config.title}
+  />
   {!!headings.length && <TOC {headings} slot='sidebar' />}
 
   <Hero {data} {remarkPluginFrontmatter} slot='header'>

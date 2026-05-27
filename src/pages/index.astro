@@ -6,6 +6,7 @@ import { PostPreview } from 'astro-pure/components/pages'
 import { getBlogCollection, sortMDByDate } from 'astro-pure/server'
 import { Button, Card, Icon, Label } from 'astro-pure/user'
 import PageLayout from '@/layouts/BaseLayout.astro'
+import WebSiteJsonLd from '@/components/WebSiteJsonLd.astro'
 import ProjectCard from '@/components/home/ProjectCard.astro'
 import Section from '@/components/home/Section.astro'
 import SkillLayout from '@/components/home/SkillLayout.astro'
@@ -30,6 +31,13 @@ if (!images[imagePath])
 ---
 
 <PageLayout meta={{ title: 'Home' }} highlightColor='#659EB9'>
+  <WebSiteJsonLd
+    slot='head'
+    name={config.title}
+    description={config.description ?? ''}
+    author={config.author}
+    lang={config.locale.lang ?? 'zh-CN'}
+  />
   <main class='flex w-full flex-col items-center'>
     <section class='animate mb-10 flex flex-col items-center gap-y-7' id='content-header'>
       <Image

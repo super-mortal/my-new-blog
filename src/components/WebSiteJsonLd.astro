@@ -1,0 +1,28 @@
+---
+interface Props {
+  name: string
+  description: string
+  author: string
+  lang: string
+}
+
+const { name, description, author, lang } = Astro.props
+
+const site = Astro.site ?? Astro.url
+const siteURL = site.href.replace(/\/$/, '')
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'WebSite',
+  name,
+  description,
+  url: siteURL,
+  inLanguage: lang,
+  author: {
+    '@type': 'Person',
+    name: author
+  }
+}
+---
+
+<script is:inline type='application/ld+json' set:html={JSON.stringify(jsonLd)} />
