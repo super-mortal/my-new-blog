@@ -1,5 +1,5 @@
 ---
-title: 'sSSH 爆破与 Rootkit 清除实录'
+title: 'SSH 爆破与 Rootkit 清除实录'
 publishDate: 2026-06-15
 description: '记录了一次完整的服务器安全应急响应过程：从发现异常资源占用，到定位 SSH 爆破蠕虫、Rootkit 后门，再到彻底清除所有恶意组件'
 tags:
