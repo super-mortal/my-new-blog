@@ -58,6 +58,14 @@ category: 教程
 - `category`：单值，一篇文章只归一个分类（可选，不填默认“未分类”）
 - `language`：通常 `中文`
 
+## 项目卡片视觉规范
+
+- 项目数据统一维护在 `public/projects.json`，配图放在 `src/assets/projects/`
+- 每个项目卡片都要配置 `image`（如 `deepseek-harness-guide.png`、`bot-deploy.png`），卡片右侧会用渐隐方式展示配图；纯文字卡片会破坏首页和项目页的视觉一致性
+- 卡片配图建议 800x500 左右的界面截图或终端卡片，右侧信息密度高、有明确主题色，风格对齐 DeepSeek Harness Guide 与 Bot Deploy 两张现有配图
+- 终端风格配图可用 `node scripts/generate-project-card-image.mjs` 重新生成；新增项目时参照该脚本生成同风格配图
+- 链接图标映射：`site` 用链链接图标，`github` 用 GitHub 图标，`doc` 用文档图标，`release` 用包图标；新增类型时同步更新 `src/components/projects/ProjectSection.astro`
+
 ## 写作流程建议（给 AI）
 
 1. 先确认主题属于博客领域（教程/运维/AI/项目/踩坑），不符合则先说明

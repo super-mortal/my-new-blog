@@ -20,18 +20,14 @@
     ]
   },
   {
-    "name": "Link Navigator",
-    "category": "工具",
-    "description": "链接导航工具的部署与使用实践，点击查看博客教程",
-    "image": "link-navigator.png",
+    "name": "Bot Deploy",
+    "category": "脚本",
+    "description": "Astrbot 和 Napcat 一键部署脚本，国内服务器友好，支持任意一个单独部署和全量部署",
+    "image": "bot-deploy.png",
     "links": [
       {
         "type": "github",
-        "href": "https://github.com/super-mortal"
-      },
-      {
-        "type": "doc",
-        "href": "/blog/xue-xi-ru-he-shi-yong-link-navigator"
+        "href": "https://github.com/super-mortal/bot_deploy"
       }
     ]
   }

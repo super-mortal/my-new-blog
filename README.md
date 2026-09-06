@@ -204,7 +204,7 @@ Vite 8 + Rolldown 不识别 `import type { ... }`、`type Props = ...`、`interf
 - 项目卡片复用 `src/components/projects/ProjectSection.astro`（上游原组件，本次修了两个遗留 bug：图标映射 `github-circle` 不存在改为 `github`；glob 正则 `avif.webp` 笔误改为 `avif,webp`）
 - 首页: About 区块之后新增 **Projects** 区块（当前 projects.json 只有 2 个项目，全部展示 + "More projects" 按钮），紧邻其后的就是 Categories 区块
 - Header 菜单: 加"项目"入口（关于左边），完整顺序: 博客 / 归档 / 分类 / 标签 / 友链 / 项目 / 关于
-- 项目卡片支持配图: `projects.json` 里加 `"image": "文件名.png"`，图片放 `src/assets/projects/`，卡片右侧显示渐隐配图（Astro 自动压缩为 webp）；不加 `image` 则纯文字卡片。当前 DeepSeek Harness Guide 与 Link Navigator 均已配置配图
+- 项目卡片支持配图: `projects.json` 里加 `"image": "文件名.png"`，图片放 `src/assets/projects/`，卡片右侧显示渐隐配图（Astro 自动压缩为 webp）；不加 `image` 则纯文字卡片。当前 DeepSeek Harness Guide 与 Bot Deploy 均已配置配图
 
 ---
 
