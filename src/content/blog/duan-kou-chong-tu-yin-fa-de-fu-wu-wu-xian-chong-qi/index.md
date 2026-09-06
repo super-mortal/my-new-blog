@@ -6,6 +6,7 @@ tags:
   - 运维
   - 笔记
 language: '中文'
+category: 笔记
 ---
 
 # 端口冲突引发的服务无限重启

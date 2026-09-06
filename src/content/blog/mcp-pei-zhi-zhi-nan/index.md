@@ -6,6 +6,7 @@ tags:
   - AI
   - 笔记
 language: '中文'
+category: 笔记
 ---
 
 # MCP 配置指南

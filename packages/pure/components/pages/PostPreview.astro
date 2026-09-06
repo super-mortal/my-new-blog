@@ -1,9 +1,10 @@
 ---
-import { Image } from 'astro:assets'
-import { type CollectionEntry, type CollectionKey, render } from 'astro:content'
+import {Image} from 'astro:assets'
+import {type CollectionEntry, type CollectionKey} from 'astro:content'
+import {render} from 'astro:content'
 
-import { cn } from '../../utils'
-import { Button, FormattedDate, Icon } from '../user'
+import {cn} from '../../utils'
+import {Button, FormattedDate, Icon} from '../user'
 
 type Props<T extends CollectionKey> = {
   post: CollectionEntry<T>

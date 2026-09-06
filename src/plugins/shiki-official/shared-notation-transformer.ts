@@ -2,8 +2,8 @@
 import type { ShikiTransformer, ShikiTransformerContext } from '@shikijs/core'
 import type { Element, Text } from 'hast'
 
-import type { ParsedComments } from './shared-parse-comments'
-import { parseComments, v1ClearEndCommentPrefix } from './shared-parse-comments'
+import {type ParsedComments} from './shared-parse-comments'
+import {parseComments, v1ClearEndCommentPrefix} from './shared-parse-comments'
 
 export type MatchAlgorithm = 'v1' | 'v3'
 

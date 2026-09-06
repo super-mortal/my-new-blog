@@ -7,6 +7,7 @@ tags:
   - 翻译
   - 工具
 language: '中文'
+category: 翻译
 ---
 
 # 沉浸式翻译介绍及使用教程

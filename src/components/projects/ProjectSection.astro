@@ -1,12 +1,13 @@
 ---
 import type { ImageMetadata } from 'astro'
-import { Image } from 'astro:assets'
+import {Image} from 'astro:assets'
 
 import type { iconsType } from 'astro-pure/types'
-import { Icon } from 'astro-pure/user'
-import { cn } from 'astro-pure/utils'
+import {Icon} from 'astro-pure/user'
+import {cn} from 'astro-pure/utils'
 
 interface Project {
+  category?: string
   image?: string
   name: string
   description: string
@@ -22,10 +23,10 @@ interface Props {
 }
 const { class: className, projects, ...props } = Astro.props
 const images = import.meta.glob<{ default: ImageMetadata }>(
-  '/src/assets/projects/*.{jpeg,jpg,png,gif,avif.webp,webp}'
+  '/src/assets/projects/*.{jpeg,jpg,png,gif,avif,webp}'
 )
 const projectIconSet: Record<string, iconsType> = {
-  github: 'github-circle',
+  github: 'github',
   site: 'earth',
   doc: 'document',
   release: 'package'
@@ -47,6 +48,11 @@ const projectIconSet: Record<string, iconsType> = {
 
         return (
           <div class='relative overflow-hidden rounded-xl border'>
+        {project.category && (
+          <span class='absolute end-2 top-2 z-20 rounded-full border bg-background/80 px-2 py-0.5 text-xs text-muted-foreground backdrop-blur-sm'>
+            {project.category}
+          </span>
+        )}
             {imagePath && (
               <Image
                 class='absolute end-0 z-0 m-0 h-full w-1/2 object-cover opacity-40'
@@ -72,7 +78,7 @@ const projectIconSet: Record<string, iconsType> = {
               <a
                 class='line-clamp-1 font-medium text-foreground no-underline transition-colors'
                 href={project.links[0].href}
-                target='_blank'
+                target={project.links[0].href.startsWith('/') ? undefined : '_blank'}
               >
                 {project.name}
               </a>
@@ -87,7 +93,7 @@ const projectIconSet: Record<string, iconsType> = {
                       href={link.href}
                       class='rounded-full bg-muted p-1 text-muted-foreground transition-colors sm:p-1.5'
                       aria-label={link.type}
-                      target='_blank'
+                      target={link.href.startsWith('/') ? undefined : '_blank'}
                     >
                       <Icon class='size-5' name={icon} />
                     </a>

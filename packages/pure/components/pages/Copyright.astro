@@ -1,11 +1,11 @@
 ---
-import type { CollectionKey, InferEntrySchema } from 'astro:content'
+import {type CollectionKey, type InferEntrySchema} from 'astro:content'
 
 import config from 'virtual:config'
 
-import { cn, getFormattedDate } from '../../utils'
-import { QRCode } from '../advanced'
-import { Icon } from '../user'
+import {cn, getFormattedDate} from '../../utils'
+import {QRCode} from '../advanced'
+import {Icon} from '../user'
 
 interface Props<T extends CollectionKey> {
   data: InferEntrySchema<T>
@@ -122,7 +122,7 @@ const shares = {
 </style>
 
 <script>
-  import { showToast } from '../../utils'
+  import {showToast} from '../../utils'
 
   // Copy link
   const copyLink = document.getElementById('copy-link')

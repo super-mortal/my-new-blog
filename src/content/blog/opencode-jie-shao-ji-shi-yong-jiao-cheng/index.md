@@ -6,6 +6,7 @@ tags:
   - AI
   - 教程
 language: '中文'
+category: 教程
 ---
 
 # OpenCode 介绍及使用教程

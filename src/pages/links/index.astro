@@ -1,14 +1,13 @@
 ---
 import links from 'public/links.json'
 
-import { Collapse, Timeline } from 'astro-pure/user'
+import {Collapse} from 'astro-pure/user'
 import config from 'virtual:config'
 import PageLayout from '@/layouts/CommonPage.astro'
 import FriendList from '@/components/links/FriendList.astro'
 
 const headings = [
   { depth: 2, slug: 'common-links', text: '普通友链' },
-  { depth: 2, slug: 'special-links', text: '特殊链接' },
   { depth: 2, slug: 'apply-links', text: '申请友链' }
 ]
 
@@ -23,9 +22,6 @@ const linkEditPage = 'https://github.com/cworld1/astro-theme-pure/blob/main/publ
   <FriendList list={friends[0]} />
   <Collapse title='失效友链'>
     <FriendList list={friends[1]} />
-  </Collapse>
-  <Collapse title='友链历史记录'>
-    <Timeline events={linksConf.logbook} />
   </Collapse>
   <h2 id='special-links'>特殊链接</h2>
   <FriendList list={friends[2]} />

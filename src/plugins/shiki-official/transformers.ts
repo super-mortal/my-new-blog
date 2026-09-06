@@ -2,8 +2,8 @@
 import type { ShikiTransformer } from '@shikijs/types'
 import type { ElementContent } from 'hast'
 
-import { transformerNotationMap } from './shared-notation-map'
-import type { MatchAlgorithmOptions } from './shared-notation-transformer'
+import {transformerNotationMap} from './shared-notation-map'
+import {type MatchAlgorithmOptions} from './shared-notation-transformer'
 
 // https://shiki.style/packages/transformers#transformernotationdiff
 // https://github.com/shikijs/shiki/blob/main/packages/transformers/src/transformers/notation-diff.ts

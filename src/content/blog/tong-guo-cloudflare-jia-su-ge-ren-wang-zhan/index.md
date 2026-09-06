@@ -6,6 +6,7 @@ tags:
   - 建站
   - 教程
 language: '中文'
+category: 教程
 ---
 
 # 通过Cloudflare加速个人网站

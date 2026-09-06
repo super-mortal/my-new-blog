@@ -6,6 +6,7 @@ tags:
   - 服务器
   - 教程
 language: '中文'
+category: 教程
 ---
 
 # 服务器 Docker 和 SSL 证书清理

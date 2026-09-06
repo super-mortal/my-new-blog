@@ -1,7 +1,7 @@
 // https://github.com/shikijs/shiki/blob/main/packages/transformers/src/shared/parse-comments.ts
 import type { Element, ElementContent } from 'hast'
 
-import type { MatchAlgorithm } from './shared-notation-transformer'
+import {type MatchAlgorithm} from './shared-notation-transformer'
 
 export type ParsedComments = {
   line: Element

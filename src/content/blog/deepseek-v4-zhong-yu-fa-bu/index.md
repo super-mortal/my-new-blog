@@ -5,6 +5,7 @@ description: '今天 DeepSeek 正式发布并且开源了 DeepSeek-V4，这也�
 tags:
   - AI
 language: '中文'
+category: 知识点
 ---
 
 # DeepSeek-V4 终于发布!

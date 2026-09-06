@@ -6,6 +6,7 @@ tags:
   - 服务器
   - 总结
 language: '中文'
+category: 总结
 ---
 
 # SSH 爆破与 Rootkit 清除实录

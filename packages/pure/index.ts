@@ -1,20 +1,26 @@
-import { spawn } from 'node:child_process'
-import { dirname, relative } from 'node:path'
-import { fileURLToPath } from 'node:url'
+import {spawn} from 'node:child_process'
+import { existsSync, readFileSync } from 'node:fs'
+import {dirname, join, relative} from 'node:path'
+import {fileURLToPath} from 'node:url'
 // Astro
-import type { AstroIntegration, RehypePlugins, RemarkPlugins } from 'astro'
-import { AstroError } from 'astro/errors'
+import type { AstroIntegration } from 'astro'
+import type { RehypePlugins, RemarkPlugins } from '@astrojs/markdown-remark'
+import {AstroError} from 'astro/errors'
+// @astrojs/markdown-remark v7 unified() replaces the deprecated `markdown.remarkPlugins` config
+import {unified} from '@astrojs/markdown-remark'
 // Integrations
 import mdx from '@astrojs/mdx'
 import sitemap from '@astrojs/sitemap'
 import UnoCSS from 'unocss/astro'
 
 import rehypeExternalLinks from './plugins/rehype-external-links'
+import remarkDirective from 'remark-directive'
+import rehypeCallouts from 'rehype-callouts'
 import rehypeTable from './plugins/rehype-table'
-import { remarkAddZoomable, remarkReadingTime } from './plugins/remark-plugins'
-import { vitePluginUserConfig } from './plugins/virtual-user-config'
-import { UserConfigSchema, type UserInputConfig } from './types/user-config'
-import { parseWithFriendlyErrors } from './utils/error-map'
+import {remarkAddZoomable, remarkReadingTime} from './plugins/remark-plugins'
+import {vitePluginUserConfig} from './plugins/virtual-user-config'
+import {UserConfigSchema, type UserInputConfig} from './types/user-config'
+import {parseWithFriendlyErrors} from './utils/error-map'
 
 export default function AstroPureIntegration(opts: UserInputConfig): AstroIntegration {
   if (typeof opts !== 'object' || opts === null || Array.isArray(opts))
@@ -40,16 +46,58 @@ export default function AstroPureIntegration(opts: UserInputConfig): AstroIntegr
         // config or by a plugin.
         const allIntegrations = [...config.integrations, ...integrations]
         if (!allIntegrations.find(({ name }) => name === '@astrojs/sitemap')) {
-          integrations.push(sitemap())
+          // lastmod: 从 frontmatter updatedDate (无则 publishDate) 读, 配合 lastmod: new Date() 占位
+                    integrations.push(sitemap({
+            changefreq: "weekly",
+            priority: 0.7,
+            // lastmod: sitemap serialize runs in astro:build:done where the Vite module
+            // runner is already closed, so import("astro:content") fails ("Vite module
+            // runner has been closed"). Read frontmatter (updatedDate ?? publishDate)
+            // directly from disk instead.
+            serialize: async (item) => {
+              const m = item.url?.match(/\/blog\/([^/]+)\/?$/)
+              if (m) {
+                const slug = decodeURIComponent(m[1])
+                const blogDir = join(process.cwd(), "src", "content", "blog")
+                const candidates = [join(blogDir, slug + ".md"), join(blogDir, slug, "index.md")]
+                for (const p of candidates) {
+                  if (!existsSync(p)) continue
+                  try {
+                    const md = readFileSync(p, "utf8")
+                    const fm = md.match(/^---\r?\n([\s\S]*?)\r?\n---/)?.[1] ?? ""
+                    const dateRaw =
+                      fm.match(/^updatedDate:\s*(.+)$/m)?.[1] ??
+                      fm.match(/^publishDate:\s*(.+)$/m)?.[1]
+                    if (dateRaw) {
+                      const d = new Date(dateRaw.trim())
+                      if (!isNaN(d.getTime())) {
+                        item.lastmod = d.toISOString().split("T")[0]
+                        break
+                      }
+                    }
+                  } catch {
+                    /* ignore */
+                  }
+                }
+              }
+              return item
+            }
+          }))
         }
         if (!allIntegrations.find(({ name }) => name === '@astrojs/mdx')) {
-          integrations.push(mdx({ optimize: true }))
+          integrations.push(mdx())
         }
         if (!allIntegrations.find(({ name }) => name === 'unocss')) {
           integrations.push(UnoCSS({ injectReset: true }))
         }
 
         // Add supported remark plugins based on user config.
+
+
+        // Admonitions (Obsidian-style callouts: note/tip/warning/caution/important/info)
+        remarkPlugins.push(remarkDirective)
+        rehypePlugins.push(rehypeCallouts)
+
         if (userConfig.integ.mediumZoom.enable)
           remarkPlugins.push([remarkAddZoomable, userConfig.integ.mediumZoom.options])
         remarkPlugins.push(remarkReadingTime)
@@ -65,11 +113,6 @@ export default function AstroPureIntegration(opts: UserInputConfig): AstroIntegr
         // Make table scrollable on overflow
         rehypePlugins.push(rehypeTable)
 
-        // Add Starlight directives restoration integration at the end of the list so that remark
-        // plugins injected by Starlight plugins through Astro integrations can handle text and
-        // leaf directives before they are transformed back to their original form.
-        // integrations.push(starlightDirectivesRestorationIntegration())
-
         // Add integrations immediately after Starlight in the config array.
         // This ensures users can add integrations before/after Starlight and we respect that order.
         const selfIndex = config.integrations.findIndex((i) => i.name === 'astro-pure')
@@ -77,17 +120,23 @@ export default function AstroPureIntegration(opts: UserInputConfig): AstroIntegr
 
         updateConfig({
           vite: {
-            // biome-ignore lint/suspicious/noTsIgnore: expects error for local, but expects no error when build
-            // @ts-ignore
             plugins: [vitePluginUserConfig(userConfig, config)]
           },
+          // Astro v7: markdown.remarkPlugins / markdown.rehypePlugins / markdown.remarkRehype
+          // are deprecated. Use `processor: unified({ ... })` from @astrojs/markdown-remark instead.
+          // We must MERGE with any plugins the user passed in their astro.config (since they may
+          // have also set their own remarkPlugins / rehypePlugins which would otherwise be lost).
           markdown: {
-            remarkPlugins,
-            rehypePlugins
-            // rehypePlugins: [rehypeRtlCodeSupport()],
-            // shikiConfig:
-            // Configure Shiki theme if the user is using the default github-dark theme.
-            //   config.markdown.shikiConfig.theme !== 'github-dark' ? {} : { theme: 'css-variables' }
+            processor: unified({
+              remarkPlugins: [
+                ...(config.markdown.remarkPlugins ?? []),
+                ...remarkPlugins
+              ],
+              rehypePlugins: [
+                ...(config.markdown.rehypePlugins ?? []),
+                ...rehypePlugins
+              ]
+            })
           },
           scopedStyleStrategy: 'where',
           // If not already configured, default to prefetching all links on hover.
@@ -111,3 +160,5 @@ export default function AstroPureIntegration(opts: UserInputConfig): AstroIntegr
     }
   }
 }
+
+

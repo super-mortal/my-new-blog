@@ -1,16 +1,20 @@
 ---
-import { Image } from 'astro:assets'
+import {Image} from 'astro:assets'
 
-import { Quote } from 'astro-pure/advanced'
-import { PostPreview } from 'astro-pure/components/pages'
-import { getBlogCollection, sortMDByDate } from 'astro-pure/server'
-import { Button, Card, Icon, Label } from 'astro-pure/user'
+import {Quote} from 'astro-pure/advanced'
+import {PostPreview} from 'astro-pure/components/pages'
+import {getBlogCollection, getUniqueCategoriesWithCount, sortMDByDate} from 'astro-pure/server'
+import {Button, Card, Icon, Label} from 'astro-pure/user'
 import PageLayout from '@/layouts/BaseLayout.astro'
 import WebSiteJsonLd from '@/components/WebSiteJsonLd.astro'
 import ProjectCard from '@/components/home/ProjectCard.astro'
+import ProjectSection from '@/components/projects/ProjectSection.astro'
 import Section from '@/components/home/Section.astro'
 import SkillLayout from '@/components/home/SkillLayout.astro'
+import SkillSection from '@/components/skills/SkillSection.astro'
 import config from '@/site-config'
+import projectsAll from '../../public/projects.json'
+import skillsAll from '../../public/skills.json'
 
 const languages = ['Html', 'JavaScript', 'CSS', 'Java']
 const frontend = ['TypeScript', 'Vite', 'Vue']
@@ -19,6 +23,12 @@ const backend = ['Node.js', 'Express', 'PostgreSQL', 'Redis']
 const MAX_POSTS = 10
 const allPosts = await getBlogCollection()
 const allPostsByDate = sortMDByDate(allPosts).slice(0, MAX_POSTS)
+const categoriesWithCount = getUniqueCategoriesWithCount(allPosts)
+const latestProjects = projectsAll.slice(0, 4)
+const latestSkills = skillsAll.categories
+  .flatMap((cat: { skills: { name: string; description: string; image?: string; category?: string; links: { type: string; href: string }[] }[] }) => cat.skills)
+  .slice(0, 4)
+const sections = config.sections ?? {}
 
 const imagePath = config.logo.src
 const images = import.meta.glob<{ default: ImageMetadata }>(
@@ -75,6 +85,7 @@ if (!images[imagePath])
     </section>
 
     <div id='content' class='animate flex flex-col gap-y-10 md:w-4/5 lg:w-5/6'>
+      {sections.about !== false && (
       <Section title='About'>
         <p class='text-muted-foreground'>Student / Developer</p>
         <p class='text-muted-foreground'>
@@ -89,8 +100,37 @@ if (!images[imagePath])
         </p>
         <Button title='More about me' class='w-fit self-end' href='/about' variant='ahead' />
       </Section>
-      {
-        allPostsByDate.length > 0 && (
+      )}
+
+
+
+
+      {sections.projects !== false && (
+      <Section title='Projects'>
+        <ProjectSection projects={latestProjects} />
+        <Button title='More projects' class='w-fit self-end' href='/projects' variant='ahead' />
+      </Section>
+      )}
+
+      {sections.categories !== false && (
+      <Section title='Categories'>
+        <div class='flex flex-wrap gap-3'>
+          {categoriesWithCount.map(([category, val]) => (
+            <a
+              href={'/categories/' + encodeURIComponent(category)}
+              data-astro-prefetch
+              class='group inline-flex items-center gap-x-2 rounded-xl border bg-muted px-3 py-1.5 text-sm transition-colors hover:border-primary/40 hover:bg-card'
+            >
+              <Icon name='package' class='size-4 text-muted-foreground group-hover:text-primary' />
+              <span class='font-medium'>{category}</span>
+              <span class='text-xs text-muted-foreground'>{val}</span>
+            </a>
+          ))}
+        </div>
+      </Section>
+      )}
+
+      {sections.posts !== false && allPostsByDate.length > 0 && (
           <Section title='Posts'>
             <ul class='flex flex-col gap-y-1.5 sm:gap-y-2'>
               {allPostsByDate.map((p) => (
@@ -103,6 +143,14 @@ if (!images[imagePath])
           </Section>
         )
       }
+
+      {sections.skills !== false && latestSkills.length > 0 && (
+      <Section title='Skills'>
+        <SkillSection skills={latestSkills} />
+        <Button title='More skills' class='w-fit self-end' href='/skills' variant='ahead' />
+      </Section>
+      )}
+
 
       {
         /* <Section title='Experience'>
@@ -133,6 +181,7 @@ if (!images[imagePath])
       />
     </Section> */
       }
+      {sections.education !== false && (
       <Section title='Education'>
         <Card
           as='a'
@@ -152,12 +201,15 @@ if (!images[imagePath])
           }
         </Card>
       </Section>
+      )}
 
-      <Section title='Skills'>
+      {sections.techStack !== false && (
+      <Section title='Tech Stack'>
         <SkillLayout title='Languages' skills={languages} />
         <SkillLayout title='Frontend' skills={frontend} />
         <SkillLayout title='Backend' skills={backend} />
       </Section>
+      )}
     </div>
     <Quote class='mt-12' />
   </main>

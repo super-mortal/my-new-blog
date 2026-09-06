@@ -11,7 +11,9 @@
     "url": "git+https://github.com/cworld1/astro-theme-pure.git",
     "directory": "packages/pure"
   },
-  "bugs": "https://github.com/cworld1/astro-theme-pure",
+  "bugs": {
+    "url": "https://github.com/cworld1/astro-theme-pure/issues"
+  },
   "keywords": [
     "astro-component",
     "withastro",
@@ -37,14 +39,15 @@
     "./libs": "./libs/index.ts"
   },
   "dependencies": {
-    "@astrojs/mdx": "^4.3.13",
-    "@astrojs/sitemap": "^3.6.0",
+    "@astrojs/markdown-remark": "^7.3.0",
+    "@astrojs/mdx": "^8.0.0",
+    "@astrojs/sitemap": "^3.7.4",
     "@pagefind/default-ui": "^1.4.0",
     "@unocss/reset": "^66.5.10",
-    "astro": "^5.16.6",
+    "astro": "^7.2.10",
     "hast-util-select": "^6.0.4",
-    "node-html-parser": "^7.0.1",
+    "node-html-parser": "^7.1.0",
     "pagefind": "^1.4.0",
-    "unocss": "^66.5.10"
+    "unocss": "^66.6.8"
   }
 }

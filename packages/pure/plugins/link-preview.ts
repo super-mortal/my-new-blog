@@ -1,4 +1,4 @@
-import { parse as htmlParser } from 'node-html-parser'
+import {parse as htmlParser} from 'node-html-parser'
 
 class LRU<K, V> extends Map<K, V> {
   constructor(private readonly maxSize: number) {

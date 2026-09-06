@@ -1,4 +1,4 @@
-import { h } from 'hastscript'
+import {h} from 'hastscript'
 import type { ShikiTransformer } from 'shiki'
 
 function parseMetaString(str = '') {

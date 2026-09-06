@@ -6,6 +6,7 @@ tags:
   - 建站
   - SEO
 language: '中文'
+category: 教程
 ---
 
 > **TL;DR**：本次 SEO 优化只做了一件事——给博客加上 JSON-LD 结构化数据。文章页自动输出 `BlogPosting`，首页自动输出 `WebSite`，以后发文无需手动维护

@@ -1,7 +1,7 @@
 import type { Element } from 'hast'
-import { select } from 'hast-util-select'
-import { rehype } from 'rehype'
-import { CONTINUE, SKIP, visit } from 'unist-util-visit'
+import {select} from 'hast-util-select'
+import {rehype} from 'rehype'
+import {CONTINUE, SKIP, visit} from 'unist-util-visit'
 
 interface Panel {
   panelId: string

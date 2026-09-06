@@ -7,6 +7,7 @@ tags:
   - 运维
   - 教程
 language: '中文'
+category: 教程
 ---
 
 # 为网站配置SSL证书

@@ -6,6 +6,7 @@ tags:
   - 技能
   - workbuddy
 language: '中文'
+category: 工具
 ---
 
 # super-ppt 技能介绍

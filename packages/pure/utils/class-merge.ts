@@ -1,4 +1,5 @@
-import { type ClassValue, clsx } from './clsx'
+import {type ClassValue} from './clsx'
+import {clsx} from './clsx'
 
 export function simpleMerge(...classes: string[]): string {
   const uniqueClasses = new Set<string>()

@@ -1,83 +1,40 @@
-import type { AstroGlobal, ImageMetadata } from 'astro'
-import { getImage } from 'astro:assets'
-import type { CollectionEntry } from 'astro:content'
-import rss from '@astrojs/rss'
-import type { Root } from 'mdast'
-import rehypeStringify from 'rehype-stringify'
-import remarkParse from 'remark-parse'
-import remarkRehype from 'remark-rehype'
-import { unified } from 'unified'
-import { visit } from 'unist-util-visit'
+import {getBlogCollection, sortMDByDate} from "astro-pure/server"
+import config from "@/site-config"
 
-import { getBlogCollection, sortMDByDate } from 'astro-pure/server'
-import config from 'virtual:config'
+export const GET = async () => {
+  const allPostsByDate = sortMDByDate(await getBlogCollection())
+  const rssFullText = (config as { rssFullText?: boolean }).rssFullText === true
+  const baseUrl = import.meta.env.SITE || ""
 
-// Get dynamic import of images as a map collection
-const imagesGlob = import.meta.glob<{ default: ImageMetadata }>(
-  '/src/content/blog/**/*.{jpeg,jpg,png,gif,avif,webp}' // add more image formats if needed
-)
-
-const renderContent = async (post: CollectionEntry<'blog'>, site: URL) => {
-  // Replace image links with the correct path
-  function remarkReplaceImageLink() {
-    /**
-     * @param {Root} tree
-     */
-    return async (tree: Root) => {
-      const promises: Promise<void>[] = []
-      visit(tree, 'image', (node) => {
-        if (node.url.startsWith('/images')) {
-          node.url = `${site}${node.url.replace('/', '')}`
-        } else {
-          const imagePathPrefix = `/src/content/blog/${post.id}/${node.url.replace('./', '')}`
-          const promise = imagesGlob[imagePathPrefix]?.().then(async (res) => {
-            const imagePath = res?.default
-            if (imagePath) {
-              node.url = `${site}${(await getImage({ src: imagePath })).src.replace('/', '')}`
-            }
-          })
-          if (promise) promises.push(promise)
+  const items = await Promise.all(
+    allPostsByDate.map(async (post) => {
+      const link = baseUrl + "blog/" + post.id + "/"
+      let contentHtml
+      if (rssFullText) {
+        try {
+          const { remark } = await import("remark")
+          const remarkHtml = (await import("remark-html")).default
+          const html = String(await remark().use(remarkHtml).process(post.body))
+          contentHtml = html + "<p>Read full: " + link + "</p>"
+        } catch (e) {
+          contentHtml = (post.data.description || "") + "<p>Read full: " + link + "</p>"
         }
-      })
-      await Promise.all(promises)
-    }
-  }
-
-  const file = await unified()
-    .use(remarkParse)
-    .use(remarkReplaceImageLink)
-    .use(remarkRehype)
-    .use(rehypeStringify)
-    .process(post.body)
-
-  return String(file)
-}
-
-const GET = async (context: AstroGlobal) => {
-  const allPostsByDate = sortMDByDate(await getBlogCollection()) as CollectionEntry<'blog'>[]
-  const siteUrl = context.site ?? new URL(import.meta.env.SITE)
-
-  return rss({
-    // Basic configs
-    trailingSlash: false,
-    xmlns: { h: 'http://www.w3.org/TR/html4/' },
-    stylesheet: '/scripts/pretty-feed-v3.xsl',
-
-    // Contents
-    title: config.title,
-    description: config.description,
-    site: import.meta.env.SITE,
-    items: await Promise.all(
-      allPostsByDate.map(async (post) => ({
+      } else {
+        contentHtml = (post.data.description || "") + "<p>Read full: " + link + "</p>"
+      }
+      return {
+        title: post.data.title,
         pubDate: post.data.publishDate,
-        link: `/blog/${post.id}`,
-        customData: `<h:img src="${typeof post.data.heroImage?.src === 'string' ? post.data.heroImage?.src : post.data.heroImage?.src.src}" />
-          <enclosure url="${typeof post.data.heroImage?.src === 'string' ? post.data.heroImage?.src : post.data.heroImage?.src.src}" />`,
-        content: await renderContent(post, siteUrl),
-        ...post.data
-      }))
-    )
-  })
-}
+        description: post.data.description,
+        link: link,
+        content: contentHtml
+      }
+    })
+  )
 
-export { GET }
+  const escape = (s: unknown) => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;")
+  const xmlItems = items.map((it) => "    <item>\n      <title>" + escape(it.title) + "</title>\n      <link>" + escape(it.link) + "</link>\n      <guid isPermaPermalink=\"true\">" + escape(it.link) + "</guid>\n      <pubDate>" + it.pubDate.toUTCString() + "</pubDate>\n      <description>" + escape(it.description || "") + "</description>\n      <content:encoded>" + escape(it.content) + "</content:encoded>\n    </item>").join("\n")
+  const xml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<rss version=\"2.0\" xmlns:content=\"http://purl.org/rss/1.0/modules/content/\" xmlns:atom=\"http://www.w3.org/2005/Atom\">\n  <channel>\n    <title>" + escape(config.title) + " RSS</title>\n    <link>" + escape(baseUrl) + "</link>\n    <description>" + escape(config.description || "") + "</description>\n    <language>zh-CN</language>\n" + xmlItems + "\n  </channel>\n</rss>"
+
+  return new Response(xml, { headers: { "Content-Type": "application/xml; charset=utf-8" } })
+}

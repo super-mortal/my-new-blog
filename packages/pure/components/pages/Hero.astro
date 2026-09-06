@@ -1,8 +1,8 @@
 ---
-import { Image } from 'astro:assets'
-import type { InferEntrySchema } from 'astro:content'
+import {Image} from 'astro:assets'
+import {type InferEntrySchema} from 'astro:content'
 
-import { FormattedDate, Icon } from '../user'
+import {FormattedDate, Icon} from '../user'
 
 interface Props {
   data: InferEntrySchema<'blog'>
@@ -10,7 +10,7 @@ interface Props {
 }
 
 const {
-  data: { title, description, draft, heroImage, publishDate, updatedDate, tags, language },
+  data: { title, description, draft, heroImage, publishDate, updatedDate, tags, language, category },
   remarkPluginFrontmatter
 } = Astro.props
 
@@ -76,6 +76,22 @@ const dateTimeOptions: Intl.DateTimeFormatOptions = {
         <span class='flex items-center gap-1'>
           <Icon name='earth' class='size-5' />
           {language}
+        </span>
+      )
+    }
+    {
+      // Category (single value, links to /categories/<name>)
+      category && (
+        <span class='flex items-center gap-1'>
+          <Icon name='package' class='size-5' />
+          <a
+            aria-label={`View more blogs in the category ${category}`}
+            class='hover:underline hover:underline-offset-4'
+            data-pagefind-filter='category'
+            href={`/categories/${category}`}
+          >
+            {category}
+          </a>
         </span>
       )
     }

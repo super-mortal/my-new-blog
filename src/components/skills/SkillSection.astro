@@ -1,0 +1,112 @@
+---
+import type { ImageMetadata } from 'astro'
+import {Image} from 'astro:assets'
+
+import type { iconsType } from 'astro-pure/types'
+import {Icon} from 'astro-pure/user'
+import {cn} from 'astro-pure/utils'
+
+interface SkillLink {
+  type: string
+  href: string
+}
+
+interface Skill {
+  category?: string
+  name: string
+  description: string
+  image?: string
+  links: SkillLink[]
+}
+
+interface Props {
+  class?: string
+  skills: Skill[]
+}
+const { class: className, skills, ...props } = Astro.props
+const images = import.meta.glob<{ default: ImageMetadata }>(
+  '/src/assets/skills/*.{jpeg,jpg,png,gif,avif,webp}'
+)
+const skillIconSet: Record<string, iconsType> = {
+  github: 'github',
+  site: 'earth',
+  doc: 'document',
+  release: 'package'
+}
+---
+
+<div class={className} {...props}>
+  <div class='grid grid-cols-1 gap-x-4 gap-y-3 sm:grid-cols-2 sm:gap-y-4'>
+    {
+      skills.map((skill) => {
+        var imagePath = null
+        if (skill.image) {
+          imagePath = '/src/assets/skills/' + skill.image
+          if (!images[imagePath])
+            throw new Error(
+              `"${imagePath}" does not exist in glob: "src/assets/skills/*.{jpeg,jpg,png,gif,avif,webp}"`
+            )
+        }
+        const primaryHref = skill.links[0]?.href ?? '#'
+
+        return (
+          <div class='relative overflow-hidden rounded-xl border'>
+        {skill.category && (
+          <span class='absolute end-2 top-2 z-20 rounded-full border bg-background/80 px-2 py-0.5 text-xs text-muted-foreground backdrop-blur-sm'>
+            {skill.category}
+          </span>
+        )}
+            {imagePath && (
+              <Image
+                class='absolute end-0 z-0 m-0 h-full w-1/2 object-cover opacity-40'
+                src={images[imagePath]()}
+                alt={skill.name}
+                loading='lazy'
+                style={{
+                  maskImage:
+                    'linear-gradient(to right, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 1) 100%)',
+                  msMaskImage:
+                    '-ms-linear-gradient(to right, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 1) 100%)',
+                  WebkitMaskImage:
+                    '-webkit-linear-gradient(to right, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 1) 100%)'
+                }}
+              />
+            )}
+            <div
+              class={cn(
+                'relative z-10 flex flex-col gap-y-1 px-2 py-1.5 sm:px-3 sm:py-2',
+                imagePath && 'me-20'
+              )}
+            >
+              <a
+                class='line-clamp-1 font-medium text-foreground no-underline transition-colors'
+                href={primaryHref}
+                target={primaryHref.startsWith('/') ? undefined : '_blank'}
+              >
+                {skill.name}
+              </a>
+              <div class='line-clamp-2 leading-snug text-muted-foreground sm:h-12'>
+                {skill.description}
+              </div>
+              <div class='flex flex-row items-center gap-x-2 sm:gap-x-3'>
+                {skill.links.map((link) => {
+                  const icon = skillIconSet[link.type]
+                  return (
+                    <a
+                      href={link.href}
+                      class='rounded-full bg-muted p-1 text-muted-foreground transition-colors sm:p-1.5'
+                      aria-label={link.type}
+                      target={link.href.startsWith('/') ? undefined : '_blank'}
+                    >
+                      <Icon class='size-5' name={icon} />
+                    </a>
+                  )
+                })}
+              </div>
+            </div>
+          </div>
+        )
+      })
+    }
+  </div>
+</div>

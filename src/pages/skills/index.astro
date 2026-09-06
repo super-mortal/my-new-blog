@@ -1,0 +1,30 @@
+---
+import skillsData from 'public/skills.json'
+
+import {Button} from 'astro-pure/user'
+import PageLayout from '@/layouts/CommonPage.astro'
+import SkillSection from '@/components/skills/SkillSection.astro'
+
+export const prerender = true
+
+const categories = skillsData.categories
+const headings = categories.map((c) => ({ depth: 2 as const, slug: c.id, text: c.title }))
+
+const meta = {
+  description: 'Skills and tools I have published on GitHub',
+  title: 'Skills'
+}
+---
+
+<PageLayout title='Skills' {headings} comment={false}>
+  <p>我发布在 GitHub 上的技能/工具，按分类展示，点击卡片或图标跳转查看</p>
+
+  {categories.map((cat) => (
+    <>
+      <h2 id={cat.id}>{cat.title}</h2>
+      <SkillSection skills={cat.skills} class='mb-2' />
+    </>
+  ))}
+
+  <Button title='Back' href='/' variant='back' class='mt-8' />
+</PageLayout>

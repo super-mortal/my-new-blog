@@ -1,4 +1,4 @@
-import type { Icons } from '../libs/icons'
+import {Icons} from '../libs/icons'
 
 export type { IntegrationUserConfig } from './integrations-config'
 export type { ThemeUserConfig } from './theme-config'

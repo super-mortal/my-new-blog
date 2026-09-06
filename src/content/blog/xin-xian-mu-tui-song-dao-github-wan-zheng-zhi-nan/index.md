@@ -6,6 +6,7 @@ tags:
   - Github
   - 总结
 language: '中文'
+category: 总结
 ---
 
 # 新项目推送到 GitHub 完整指南

@@ -1,6 +1,6 @@
-import { z } from 'astro/zod'
+import {z} from 'astro/zod'
 
-import { FriendLinksSchema } from '../schemas/links'
+import {FriendLinksSchema} from '../schemas/links'
 
 export const IntegrationConfigSchema = () =>
   z.object({
@@ -44,20 +44,6 @@ export const IntegrationConfigSchema = () =>
       selector: z.string().default('.prose .zoomable'),
       /** Options to pass to the medium zoom library. */
       options: z.record(z.string(), z.any()).default({ className: 'zoomable' })
-    }),
-
-    /** The Waline comment system */
-    waline: z.object({
-      /** Enable the Waline comment system. */
-      enable: z.boolean().default(false),
-      /** The server to use for the Waline comment system. */
-      server: z.string().optional(),
-      /** Show meta info for comments */
-      showMeta: z.boolean().default(true),
-      /** The emoji to use for the Waline comment system. */
-      emoji: z.array(z.string()).optional(),
-      /** Additional configurations for the Waline comment system. */
-      additionalConfigs: z.record(z.string(), z.any()).default({})
     })
   })
 

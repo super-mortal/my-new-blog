@@ -6,6 +6,7 @@ tags:
   - 开源项目
   - 教程
 language: '中文'
+category: 教程
 ---
 
 # Link-Navigator使用说明

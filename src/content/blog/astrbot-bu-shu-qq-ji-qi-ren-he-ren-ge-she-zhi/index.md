@@ -6,6 +6,7 @@ tags:
   - Astrbot
   - 总结
 language: '中文'
+category: 总结
 ---
 
 ## 部署篇

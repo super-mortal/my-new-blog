@@ -6,6 +6,7 @@ tags:
   - Cloudflare
   - 教程
 language: '中文'
+category: 教程
 ---
 
 # 使用Cloudflare Pages 部署 VitePress 站点

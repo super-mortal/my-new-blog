@@ -12,6 +12,20 @@ export const theme: ThemeUserConfig = {
   favicon: '/favicon/favicon.ico',
   /** The default social card image for your site which should be a path to an image in the `public/` directory. */
   socialCard: 'https://supermortal.cn/images/social-card.png',
+  /** RSS feed: true = full text, false (default) = description only */
+  rssFullText: false,
+  /** 首页板块开关: 设为 false 整块隐藏（含导航入口逻辑由菜单自行控制） */
+  sections: {
+    about: true,
+    projects: true,
+    skills: true,
+    categories: true,
+    posts: true,
+    education: true,
+    techStack: true
+  },
+  /** 主题色 (hex 6 位). 不设则从 src/assets/styles/app.css 的 --primary 读. OG 图片背景用这个色. */
+  // themeColor: '#5fa8d3',
   /** Specify the default language for this site. */
   locale: {
     lang: 'zh-CN',
@@ -49,8 +63,10 @@ export const theme: ThemeUserConfig = {
     menu: [
       { title: '博客', link: '/blog' },
       { title: '归档', link: '/archives' },
-      { title: '友链', link: '/links' },
+      { title: '分类', link: '/categories' },
       { title: '标签', link: '/tags' },
+      { title: '友链', link: '/links' },
+      { title: '项目', link: '/projects' },
       { title: '关于', link: '/about' }
     ]
   },
@@ -73,7 +89,7 @@ export const theme: ThemeUserConfig = {
         pos: 2 // position set to 2 will be appended to copyright line
       }
     ],
-    /** Enable displaying a “Astro & Pure theme powered” link in your site’s footer. */
+    /** Enable displaying a "Astro & Pure theme powered" link in your site's footer. */
     credits: true,
     /** Optional details about the social media accounts for this site. */
     social: {} // 移除所有social图标，RSS已移到首页
@@ -100,8 +116,6 @@ export const integ: IntegrationUserConfig = {
   // [Links]
   // https://astro-pure.js.org/docs/integrations/links
   links: {
-    // Friend logbook
-    logbook: [{ date: '2026-03-17', content: '添加morta友链' }],
     // Yourself link info
     applyTip: [
       // 我的站点信息
@@ -149,27 +163,6 @@ export const integ: IntegrationUserConfig = {
     options: {
       className: 'zoomable'
     }
-  },
-  // Comment system
-  waline: {
-    enable: false,
-    // Server service link
-    server: 'https://astro-theme-pure-waline.arthals.ink/',
-    // Show meta info for comments
-    showMeta: false,
-    // Refer https://waline.js.org/en/guide/features/emoji.html
-    emoji: ['bmoji', 'weibo'],
-    // Refer https://waline.js.org/en/reference/client/props.html
-    additionalConfigs: {
-      // search: false,
-      pageview: true,
-      comment: true,
-      locale: {
-        reaction0: 'Like',
-        placeholder: 'Welcome to comment. (Email to receive replies. Login is unnecessary)'
-      },
-      imageUploader: false
-    }
   }
 }
 
@@ -197,3 +190,5 @@ export const terms: CardListData = {
 
 const config = { ...theme, integ } as Config
 export default config
+
+

@@ -6,6 +6,7 @@ tags:
   - 飞牛nas
   - 总结
 language: '中文'
+category: 总结
 ---
 
 # VMware 虚拟机部署 fnOS 飞牛私有云

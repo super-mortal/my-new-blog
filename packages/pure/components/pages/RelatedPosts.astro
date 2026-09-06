@@ -1,0 +1,61 @@
+---
+import { type CollectionEntry } from 'astro:content'
+
+import { cn } from '../../utils'
+
+type Props = {
+  current: CollectionEntry<'blog'>
+  related: CollectionEntry<'blog'>[]
+  class?: string
+}
+
+const { current, related, class: className } = Astro.props
+
+const currentTags = (current.data as { tags?: string[] }).tags ?? []
+
+function sharedTags(post: CollectionEntry<'blog'>): string[] {
+  const tags = (post.data as { tags?: string[] }).tags ?? []
+  return tags.filter((t) => currentTags.includes(t))
+}
+---
+
+{
+  related.length > 0 && (
+    <section
+      class={cn(
+        'mt-6 sm:mt-8 rounded-xl border bg-card/30 p-3 sm:p-4',
+        className
+      )}
+      aria-label='Related posts'
+    >
+      <h2 class='mb-2 flex items-center gap-2 text-sm font-medium text-muted-foreground'>
+        <span class='size-1.5 rounded-full bg-primary' aria-hidden='true' />
+        相关推荐
+        <span class='text-xs text-muted-foreground/60'>({related.length})</span>
+      </h2>
+      <ul class='grid grid-cols-1 gap-1.5 sm:grid-cols-2'>
+        {related.map((post) => {
+          const shared = sharedTags(post)
+          return (
+            <li>
+              <a
+                href={`/blog/${post.id}`}
+                class='group flex items-baseline gap-x-2 rounded-md px-2 py-1.5 transition-colors hover:bg-muted/60'
+                data-astro-prefetch
+              >
+                <span class='line-clamp-1 grow text-sm transition-colors group-hover:text-primary'>
+                  {post.data.title}
+                </span>
+                {shared.length > 0 && (
+                  <span class='shrink-0 text-xs text-muted-foreground/70'>
+                    ×{shared.length}
+                  </span>
+                )}
+              </a>
+            </li>
+          )
+        })}
+      </ul>
+    </section>
+  )
+}

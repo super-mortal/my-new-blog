@@ -5,6 +5,7 @@ description: '讲述近期 OpenAI 的内购收据验证漏洞导致的无限充�
 tags:
   - AI
 language: '中文'
+category: 知识点
 ---
 
 # GPT 充值漏洞解析

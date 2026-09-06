@@ -1,0 +1,68 @@
+[
+  {
+    "name": "DeepSeek Harness Guide",
+    "category": "文档站",
+    "description": "DeepSeek Harness (dsh) 实战蓝皮书：E-INK 风格 VitePress 文档站，6 种语言",
+    "links": [
+      {
+        "type": "site",
+        "href": "https://dsh.supermortal.top/"
+      },
+      {
+        "type": "github",
+        "href": "https://github.com/super-mortal/DeepSeekHarnessGuide"
+      },
+      {
+        "type": "doc",
+        "href": "/blog/deepseek-harness-guide"
+      }
+    ]
+  },
+  {
+    "name": "supermortal.cn",
+    "category": "博客",
+    "description": "本博客：基于 astro-theme-pure 深度改造，Astro 7 + Vite 8 Rolldown + 动态 OG 图 + 全站 SSR",
+    "image": "supermortal-cn.png",
+    "links": [
+      {
+        "type": "site",
+        "href": "https://supermortal.cn"
+      },
+      {
+        "type": "github",
+        "href": "https://github.com/super-mortal"
+      },
+      {
+        "type": "doc",
+        "href": "/blog/my-first-blog"
+      }
+    ]
+  },
+  {
+    "name": "Link Navigator",
+    "category": "工具",
+    "description": "链接导航工具的部署与使用实践，点击查看博客教程",
+    "image": "link-navigator.png",
+    "links": [
+      {
+        "type": "github",
+        "href": "https://github.com/super-mortal"
+      },
+      {
+        "type": "doc",
+        "href": "/blog/xue-xi-ru-he-shi-yong-link-navigator"
+      }
+    ]
+  },
+  {
+    "name": "更多项目",
+    "category": "其他",
+    "description": "在 GitHub 主页查看我的全部开源项目",
+    "links": [
+      {
+        "type": "github",
+        "href": "https://github.com/super-mortal"
+      }
+    ]
+  }
+]

@@ -1,8 +1,8 @@
 // https://github.com/shikijs/shiki/blob/main/packages/transformers/src/transformers/notation-map.ts
 import type { ShikiTransformer } from '@shikijs/types'
 
-import type { MatchAlgorithmOptions } from './shared-notation-transformer'
-import { createCommentNotationTransformer } from './shared-notation-transformer'
+import {type MatchAlgorithmOptions} from './shared-notation-transformer'
+import {createCommentNotationTransformer} from './shared-notation-transformer'
 
 export interface TransformerNotationMapOptions extends MatchAlgorithmOptions {
   classMap?: Record<string, string | string[]>

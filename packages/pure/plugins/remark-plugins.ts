@@ -1,6 +1,6 @@
 import type { Node, Root } from 'mdast'
 import type { Plugin } from 'unified'
-import { visit } from 'unist-util-visit'
+import {visit} from 'unist-util-visit'
 
 // Cannot use '../utils' for plugin absolute path
 import mdastToString from '../utils/mdast-util-to-string'

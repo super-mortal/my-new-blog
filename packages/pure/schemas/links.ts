@@ -1,14 +1,9 @@
-import { z } from 'astro/zod'
+import {z} from 'astro/zod'
 
 export const FriendLinksSchema = () =>
   z
     .object({
-      logbook: z.array(
-        z.object({
-          date: z.string(),
-          content: z.string()
-        })
-      ),
+      logbook: z.array(z.object({ date: z.string(), content: z.string() })).optional().default([]),
       applyTip: z.array(
         z.object({
           name: z.string(),

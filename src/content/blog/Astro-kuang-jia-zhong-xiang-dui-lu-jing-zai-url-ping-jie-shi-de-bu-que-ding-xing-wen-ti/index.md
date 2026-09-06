@@ -6,6 +6,7 @@ tags:
   - 建站
   - 爬虫
 language: '中文'
+category: 知识点
 ---
 
 # Astro框架中相对路径在URL拼接时的不确定性问题

@@ -1,16 +1,16 @@
 ---
 import type { MarkdownHeading } from 'astro'
-import type { CollectionEntry } from 'astro:content'
+import { type CollectionEntry } from 'astro:content'
 
 // Plugin styles
 import 'katex/dist/katex.min.css'
 
 import { MediumZoom } from 'astro-pure/advanced'
-import { ArticleBottom, Copyright, Hero, TOC } from 'astro-pure/components/pages'
+import { ArticleBottom, Copyright, Hero, RelatedPosts, TOC } from 'astro-pure/components/pages'
+import { getRelatedPosts } from 'astro-pure/server'
 import config from 'virtual:config'
 import BlogPostingJsonLd from '@/components/BlogPostingJsonLd.astro'
 import PageLayout from '@/layouts/ContentLayout.astro'
-import { Comment, PageInfo } from '@/components/waline'
 
 interface Props {
   post: CollectionEntry<'blog'>
@@ -20,21 +20,14 @@ interface Props {
 }
 
 const {
-  post: { id, data },
+  post,
   posts,
   headings,
   remarkPluginFrontmatter
 } = Astro.props
 
-const {
-  description,
-  heroImage,
-  publishDate,
-  title,
-  updatedDate,
-  draft: isDraft,
-  comment: enableComment
-} = data
+const { id, data } = post
+const { description, heroImage, publishDate, title, updatedDate, draft: isDraft } = data
 
 const socialImage = heroImage
   ? typeof heroImage.src === 'string'
@@ -43,6 +36,9 @@ const socialImage = heroImage
   : config.socialCard
 const articleDate = updatedDate?.toISOString() ?? publishDate.toISOString()
 const primaryColor = data.heroImage?.color ?? 'hsl(var(--primary) / var(--un-text-opacity))'
+
+// Related: 4 cards by default, shown when not a draft
+const relatedPosts = isDraft ? [] : getRelatedPosts(post, posts, 4)
 ---
 
 <PageLayout
@@ -63,21 +59,17 @@ const primaryColor = data.heroImage?.color ?? 'hsl(var(--primary) / var(--un-tex
   />
   {!!headings.length && <TOC {headings} slot='sidebar' />}
 
-  <Hero {data} {remarkPluginFrontmatter} slot='header'>
-    <Fragment slot='description'>
-      {!isDraft && enableComment && <PageInfo comment class='mt-1' />}
-    </Fragment>
-  </Hero>
+  <Hero {data} {remarkPluginFrontmatter} slot='header' />
 
   <slot />
 
   <Fragment slot='bottom'>
     {/* Copyright */}
     <Copyright {data} />
-    {/* Article recommend */}
+    {/* Article navigation: previous / next */}
     <ArticleBottom collections={posts} {id} class='mt-3 sm:mt-6' />
-    { /* Comment */
-    !isDraft && enableComment && <Comment class='mt-3 sm:mt-6' />}
+    {/* Related: tag-overlap based, shown only when not draft */}
+    {!isDraft && <RelatedPosts current={post} related={relatedPosts} class='mt-3 sm:mt-6' />}
   </Fragment>
 
   <slot name='bottom-sidebar' slot='bottom-sidebar' />

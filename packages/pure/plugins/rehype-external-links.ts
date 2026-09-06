@@ -1,7 +1,7 @@
 // https://github.com/rehypejs/rehype-external-links
 
 import type { Element, ElementContent, Root } from 'hast'
-import { visit } from 'unist-util-visit'
+import {visit} from 'unist-util-visit'
 
 import isAbsoluteUrl from '../utils/is-absolute-url'
 
@@ -48,7 +48,7 @@ export default function rehypeExternalLinks(options: ExternalLinkOptions = {}) {
         if (href.startsWith('//') || (isAbsoluteUrl(href) && protocols.includes(protocol))) {
           node.properties = {
             ...node.properties,
-            rel: 'nofollow noopener noreferrer',
+            rel: ['nofollow', 'noopener', 'noreferrer'],
             target: '_blank'
           }
 

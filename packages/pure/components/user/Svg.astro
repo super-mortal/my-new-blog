@@ -1,6 +1,7 @@
 ---
 // https://github.com/jasikpark/astro-svg-loader/blob/main/src/components/Svg/Svg.astro
-import { overrideSvgAttributes, type SVGAttributes } from '../../plugins/override-svg-attributes'
+import {type SVGAttributes} from '../../plugins/override-svg-attributes'
+import {overrideSvgAttributes} from '../../plugins/override-svg-attributes'
 
 // accepts SVG attributes which will override the ones in the original SVG
 export interface Props extends SVGAttributes {

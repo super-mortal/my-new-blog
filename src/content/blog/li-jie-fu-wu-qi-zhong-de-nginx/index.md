@@ -7,6 +7,7 @@ tags:
   - 知识点
   - 运维
 language: '中文'
+category: 知识点
 ---
 
 # 理解服务器中的Nginx

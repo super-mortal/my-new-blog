@@ -1,7 +1,10 @@
 ---
-import { PostPreview } from 'astro-pure/components/pages'
-import { getBlogCollection, groupCollectionsByYear, sortMDByDate } from 'astro-pure/server'
-import { Button } from 'astro-pure/user'
+import {type CollectionEntry} from 'astro:content'
+
+import {PostPreview} from 'astro-pure/components/pages'
+import {getBlogCollection, groupCollectionsByYear, sortMDByDate} from 'astro-pure/server'
+import config from 'virtual:config'
+import {Button} from 'astro-pure/user'
 import PageLayout from '@/layouts/BaseLayout.astro'
 
 export const prerender = true
@@ -9,6 +12,18 @@ export const prerender = true
 const allPosts = await getBlogCollection()
 const allPostsByDate = sortMDByDate(allPosts)
 const allPostsByYear = groupCollectionsByYear(allPostsByDate)
+
+// 按月分组: posts 已按时间倒序，保持首次出现的月份顺序即为"新月份在前"
+function groupPostsByMonth(posts: CollectionEntry<'blog'>[]) {
+  const map = new Map<number, CollectionEntry<'blog'>[]>()
+  for (const p of posts) {
+    const d = new Date(p.data.updatedDate ?? p.data.publishDate)
+    const m = d.getMonth()
+    if (!map.has(m)) map.set(m, [])
+    map.get(m)?.push(p)
+  }
+  return [...map.entries()]
+}
 
 const meta = {
   description: 'A list of all the years of creating my posts',
@@ -39,11 +54,21 @@ const meta = {
             <p class='px-5 text-muted-foreground'>
               {posts.length} post{posts.length > 1 && 's'}
             </p>
-            <ul class='flex flex-col text-start'>
-              {posts.map((p) => (
-                <PostPreview post={p} class='border-0 bg-transparent py-2' />
-              ))}
-            </ul>
+            {groupPostsByMonth(posts).map(([month, monthPosts]) => (
+              <div class='mt-10'>
+                <h3 class='flex items-baseline gap-2 px-5 text-lg font-medium'>
+                  {new Intl.DateTimeFormat(config.locale.dateLocale, { month: 'long' }).format(new Date(year, month, 1))}
+                  <span class='text-xs font-normal text-muted-foreground'>
+                    {monthPosts.length} post{monthPosts.length > 1 && 's'}
+                  </span>
+                </h3>
+                <ul class='mt-2 flex flex-col text-start'>
+                  {monthPosts.map((p) => (
+                    <PostPreview post={p} class='border-0 bg-transparent py-2' />
+                  ))}
+                </ul>
+              </div>
+            ))}
           </div>
         ))
       }

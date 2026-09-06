@@ -5,6 +5,7 @@ description: '我的第一篇博客诞生——不必借光而行，你我亦是
 tags:
   - 建站
 language: '中文'
+category: 笔记
 ---
 
 # 关于我的博客
@@ -31,3 +32,5 @@ git commit -m "内容"
 # 推送到 GitHub
 git push
 ```
+
+

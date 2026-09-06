@@ -1,12 +1,12 @@
-import { z } from 'astro/zod'
+import {z} from 'astro/zod'
 
-import { FaviconSchema } from '../schemas/favicon'
-import { HeadConfigSchema } from '../schemas/head'
-import { HeaderMenuSchema } from '../schemas/header'
-import { LocaleConfigSchema } from '../schemas/locale'
-import { LogoConfigSchema } from '../schemas/logo'
-import { ShareSchema } from '../schemas/share'
-import { SocialLinksSchema } from '../schemas/social'
+import {FaviconSchema} from '../schemas/favicon'
+import {HeadConfigSchema} from '../schemas/head'
+import {HeaderMenuSchema} from '../schemas/header'
+import {LocaleConfigSchema} from '../schemas/locale'
+import {LogoConfigSchema} from '../schemas/logo'
+import {ShareSchema} from '../schemas/share'
+import {SocialLinksSchema} from '../schemas/social'
 
 export const ThemeConfigSchema = () =>
   z.object({
@@ -175,7 +175,7 @@ export const ThemeConfigSchema = () =>
         content: z.string().optional().default(' ↗').describe('Content to show for external links'),
         /** Properties for the external links element */
         properties: z
-          .record(z.string())
+          .record(z.string(), z.string())
           .optional()
           .describe('Properties for the external links element')
       }),
@@ -185,7 +185,27 @@ export const ThemeConfigSchema = () =>
 
       /** Share buttons to show */
       share: ShareSchema()
-    })
+    }),
+
+    /** RSS full text mode */
+    rssFullText: z.boolean().default(false),
+
+    /** Homepage sections visibility switches (false = hide entirely) */
+    sections: z
+      .object({
+        about: z.boolean().default(true),
+        projects: z.boolean().default(true),
+        skills: z.boolean().default(true),
+        categories: z.boolean().default(true),
+        posts: z.boolean().default(true),
+        education: z.boolean().default(true),
+        techStack: z.boolean().default(true)
+      })
+      .partial()
+      .default({}),
+
+    /** Theme color hex 6 chars */
+    themeColor: z.string().regex(/^#[0-9a-fA-F]{6}$/).optional()
   })
 
 export type ThemeUserConfig = z.input<ReturnType<typeof ThemeConfigSchema>>

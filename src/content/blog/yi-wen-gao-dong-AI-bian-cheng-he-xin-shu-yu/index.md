@@ -6,6 +6,7 @@ tags:
   - AI
   - 知识点
 language: '中文'
+category: 知识点
 ---
 
 # 一文搞懂 AI 编程的核心术语

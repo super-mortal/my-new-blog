@@ -1,9 +1,12 @@
-import { rehypeHeadingIds } from '@astrojs/markdown-remark'
+import { rehypeHeadingIds, unified } from '@astrojs/markdown-remark'
+import remarkDirective from 'remark-directive'
+import rehypeCallouts from 'rehype-callouts'
 import vercel from '@astrojs/vercel'
 import AstroPureIntegration from 'astro-pure'
 import { defineConfig, fontProviders } from 'astro/config'
 import rehypeKatex from 'rehype-katex'
 import remarkMath from 'remark-math'
+import { transformSync } from 'esbuild'
 
 // Local integrations
 import rehypeAutolinkHeadings from './src/plugins/rehype-auto-link-headings.ts'
@@ -22,131 +25,124 @@ import {
 } from './src/plugins/shiki-official/transformers.ts'
 import config from './src/site.config.ts'
 
+// Workaround for Astro 7's Rust compiler (compiler-rs) emitting TS syntax that Rolldown
+// (Vite 8's bundler) cannot parse, plus a couple of compiler-rs bugs producing invalid JS:
+//   - `A && B ?? C` (missing parens)
+//   - extra `(` in `&& (isRemoteImage(...)) {`
+// We run esbuild (loader: tsx) on the compiled .astro output so it can:
+//   1. Strip `type` / `interface` / `import type` (zod-v4-style & TS-only syntax)
+//   2. Strip TS-only type annotations and inline `type` modifiers in imports
+//   3. Fix parens around `&&` / `??` (already fixed by esbuild's strict mode being
+//      satisfied because we patched the source BEFORE esbuild parses it)
+const fixCompilerBugs = {
+  name: 'astro-v7-fix',
+  enforce: 'post' as const,
+  transform(code: string, id: string) {
+    if (!/\.(astro|ts|tsx|mts|cts)(\?.*)?$/.test(id)) return
+    let out = code
+
+    // Fix #1: A && B ?? C  ->  A && (B ?? C)
+    out = out.replace(
+      /&&[ \t]+([^?:,(){}]+?)[ \t]*\?\?[ \t]*([^?:,(){}]+)/g,
+      (_m, x, y) => `&& (${x.trim()} ?? ${y.trim()})`
+    )
+
+    // Fix #2: `&& (cond) {` -> `&& cond {` (extra left paren before function-call subject)
+    out = out.replace(/&&[ \t]+\(([^()]+)\)\s*\{/g, '&& $1 {')
+
+    try {
+      const result = transformSync(out, {
+        // .astro compiled output is JS with possible TS remnants; tsx handles JSX + TS
+        loader: 'tsx',
+        format: 'esm',
+        target: 'es2022',
+        sourcefile: id
+      })
+      return { code: result.code, map: null }
+    } catch (e) {
+      console.warn(`[astro-v7-fix] esbuild failed for ${id}: ${(e as Error).message}`)
+      return null
+    }
+  }
+}
+
 // https://astro.build/config
 export default defineConfig({
-  // [Basic]
   site: 'https://supermortal.cn',
-  // Deploy to a sub path
-  // https://astro-pure.js.org/docs/setup/deployment#platform-with-base-path
-  // base: '/astro-pure/',
   trailingSlash: 'never',
-  // root: './my-project-directory',
   server: { host: true },
+  compressHTML: false,
 
-  // [Adapter]
-  // https://docs.astro.build/en/guides/deploy/
   adapter: vercel({ imageService: true }),
   output: 'server',
-  // Local (standalone)
-  // adapter: node({ mode: 'standalone' }),
-  // output: 'server',
 
-  // [Assets]
   image: {
     responsiveStyles: true,
     service: { entrypoint: 'astro/assets/services/sharp' },
     remotePatterns: [
-      // Allow improve Github activity chart
-      {
-        protocol: 'https',
-        hostname: '**.rshah.org'
-      },
-      // Allow QQ avatars
-      {
-        protocol: 'https',
-        hostname: 'q1.qlogo.cn'
-      },
-      // Allow cravatar avatars
-      {
-        protocol: 'https',
-        hostname: 'cravatar.cn'
-      },
-      // Allow GitHub avatars
-      {
-        protocol: 'https',
-        hostname: 'avatars.githubusercontent.com'
-      }
+      { protocol: 'https', hostname: '**.rshah.org' },
+      { protocol: 'https', hostname: 'q1.qlogo.cn' },
+      { protocol: 'https', hostname: 'cravatar.cn' },
+      { protocol: 'https', hostname: 'avatars.githubusercontent.com' }
     ]
   },
 
-  // [Markdown]
   markdown: {
-    remarkPlugins: [remarkMath],
-    rehypePlugins: [
-      [rehypeKatex, {}],
-      rehypeHeadingIds,
-      [
-        rehypeAutolinkHeadings,
-        {
-          behavior: 'append',
-          properties: { className: ['anchor'] },
-          content: { type: 'text', value: '#' }
-        }
+    processor: unified({
+      remarkPlugins: [remarkDirective, remarkMath],
+      rehypePlugins: [
+        [rehypeKatex, {}],
+        rehypeCallouts,
+        rehypeHeadingIds,
+        [
+          rehypeAutolinkHeadings,
+          {
+            behavior: 'append',
+            properties: { className: ['anchor'] },
+            content: { type: 'text', value: '#' }
+          }
+        ]
       ]
-    ],
-    // https://docs.astro.build/en/guides/syntax-highlighting/
+    }),
     shikiConfig: {
-      themes: {
-        light: 'github-light',
-        dark: 'github-dark'
-      },
+      themes: { light: 'github-light', dark: 'github-dark' },
       transformers: [
-        // Two copies of @shikijs/types (one under node_modules
-        // and another nested under @astrojs/markdown-remark → shiki).
-        // Official transformers
-        // @ts-ignore this happens due to multiple versions of shiki types
+        // @ts-ignore
         transformerNotationDiff(),
-        // @ts-ignore this happens due to multiple versions of shiki types
+        // @ts-ignore
         transformerNotationHighlight(),
-        // @ts-ignore this happens due to multiple versions of shiki types
+        // @ts-ignore
         transformerRemoveNotationEscape(),
-        // Custom transformers
-        // @ts-ignore this happens due to multiple versions of shiki types
+        // @ts-ignore
         updateStyle(),
-        // @ts-ignore this happens due to multiple versions of shiki types
+        // @ts-ignore
         addTitle(),
-        // @ts-ignore this happens due to multiple versions of shiki types
+        // @ts-ignore
         addLanguage(),
-        // @ts-ignore this happens due to multiple versions of shiki types
-        addCopyButton(2000), // timeout in ms
-        // @ts-ignore this happens due to multiple versions of shiki types
-        addCollapse(15) // max lines that needs to collapse
+        // @ts-ignore
+        addCopyButton(2000),
+        // @ts-ignore
+        addCollapse(15)
       ]
     }
   },
 
-  // [Integrations]
-  integrations: [
-    // astro-pure will automatically add sitemap, mdx & unocss
-    // sitemap(),
-    // mdx(),
-    AstroPureIntegration(config)
+  integrations: [AstroPureIntegration(config)],
+
+  fonts: [
+    {
+      provider: fontProviders.fontshare(),
+      name: 'Satoshi',
+      cssVariable: '--font-satoshi',
+      styles: ['normal', 'italic'],
+      weights: [400, 500],
+      subsets: ['latin']
+    }
   ],
 
-  // [Experimental]
+  vite: { plugins: [fixCompilerBugs] },
+
   experimental: {
-    // Allow compatible editors to support intellisense features for content collection entries
-    // https://docs.astro.build/en/reference/experimental-flags/content-intellisense/
-    contentIntellisense: true,
-    // Enable SVGO optimization for SVG assets
-    // https://docs.astro.build/en/reference/experimental-flags/svg-optimization/
-    svgo: true,
-    // Enable font preloading and optimization
-    // https://docs.astro.build/en/reference/experimental-flags/fonts/
-    fonts: [
-      {
-        provider: fontProviders.fontshare(),
-        name: 'Satoshi',
-        cssVariable: '--font-satoshi',
-        // Default included:
-        // weights: [400],
-        // styles: ["normal", "italics"],
-        // subsets: ["cyrillic-ext", "cyrillic", "greek-ext", "greek", "vietnamese", "latin-ext", "latin"],
-        // fallbacks: ["sans-serif"],
-        styles: ['normal', 'italic'],
-        weights: [400, 500],
-        subsets: ['latin']
-      }
-    ]
+    contentIntellisense: true
   }
 })

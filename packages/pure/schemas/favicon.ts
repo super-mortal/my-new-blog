@@ -1,5 +1,5 @@
-import { extname } from 'node:path'
-import { z } from 'astro/zod'
+import {extname} from 'node:path'
+import {z} from 'astro/zod'
 
 const faviconTypeMap = {
   '.ico': 'image/x-icon',

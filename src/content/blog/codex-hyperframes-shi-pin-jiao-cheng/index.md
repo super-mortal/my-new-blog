@@ -7,6 +7,7 @@ tags:
   - HyperFrames
   - 教程
 language: '中文'
+category: 教程
 ---
 
 # 用 Codex 做视频：HyperFrames 新手入门教程

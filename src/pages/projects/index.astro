@@ -1,0 +1,25 @@
+---
+import projects from 'public/projects.json'
+
+import {Button} from 'astro-pure/user'
+import PageLayout from '@/layouts/CommonPage.astro'
+import ProjectSection from '@/components/projects/ProjectSection.astro'
+
+export const prerender = true
+
+const headings = [{ depth: 2, slug: 'all-projects', text: '全部项目' }]
+
+const meta = {
+  description: 'Projects and tools I have built',
+  title: 'Projects'
+}
+---
+
+<PageLayout title='Projects' {headings}>
+  <p>我做过的项目和工具，源码一般在 GitHub 上</p>
+
+  <h2 id='all-projects'>全部项目</h2>
+  <ProjectSection projects={projects} />
+
+  <Button title='Back' href='/' variant='back' class='mt-8' />
+</PageLayout>

@@ -1,0 +1,41 @@
+{
+  "categories": [
+    {
+      "id": "openclaw",
+      "title": "OpenClaw",
+      "skills": [
+        {
+          "name": "OpenClaw Skills",
+          "description": "OpenClaw 相关的技能/插件合集，含安装与使用说明",
+          "image": "openclaw-skills.png",
+          "links": [
+            {
+              "type": "github",
+              "href": "https://github.com/super-mortal"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "tools",
+      "title": "工具",
+      "skills": [
+        {
+          "name": "Link Navigator",
+          "description": "链接导航工具配置实践，教程见博客",
+          "links": [
+            {
+              "type": "github",
+              "href": "https://github.com/super-mortal"
+            },
+            {
+              "type": "doc",
+              "href": "/blog/xue-xi-ru-he-shi-yong-link-navigator"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

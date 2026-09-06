@@ -6,6 +6,7 @@ tags:
   - OpenClaw
   - 教程
 language: '中文'
+category: 教程
 ---
 
 # 云服务器手动部署OpenClaw指南

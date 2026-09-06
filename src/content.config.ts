@@ -1,5 +1,5 @@
-import { glob } from 'astro/loaders'
-import { defineCollection, z } from 'astro:content'
+import {glob} from 'astro/loaders'
+import {defineCollection, z} from 'astro:content'
 
 function removeDupsAndLowerCase(array: string[]) {
   if (!array.length) return array
@@ -28,15 +28,14 @@ const blog = defineCollection({
           inferSize: z.boolean().optional(),
           width: z.number().optional(),
           height: z.number().optional(),
-
           color: z.string().optional()
         })
         .optional(),
       tags: z.array(z.string()).default([]).transform(removeDupsAndLowerCase),
+      // Single category per post (replaces the old multi-categories system removed earlier)
+      category: z.string().default('未分类'),
       language: z.string().optional(),
-      draft: z.boolean().default(false),
-      // Special fields
-      comment: z.boolean().default(true)
+      draft: z.boolean().default(false)
     })
 })
 

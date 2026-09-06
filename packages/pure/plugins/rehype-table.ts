@@ -1,6 +1,6 @@
 import type { Element, Root } from 'hast'
 import type { Plugin } from 'unified'
-import { visit } from 'unist-util-visit'
+import {visit} from 'unist-util-visit'
 
 /**
  * Rehype plugin that wraps direct table children of #content in a scrollable div
