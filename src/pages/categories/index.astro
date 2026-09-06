@@ -1,12 +1,8 @@
 ---
-import type { GetStaticPaths, Page } from 'astro'
-import {type CollectionEntry} from 'astro:content'
 
-import {Paginator, PostPreview} from 'astro-pure/components/pages'
-import {getBlogCollection, getUniqueCategoriesWithCount, sortMDByDate} from 'astro-pure/server'
+import {getBlogCollection, getUniqueCategoriesWithCount} from 'astro-pure/server'
 import {Button} from 'astro-pure/user'
 import PageLayout from '@/layouts/BaseLayout.astro'
-import config from '@/site-config'
 
 export const prerender = true
 
@@ -17,6 +13,7 @@ const meta = {
   description: "A list of all the categories I've written about in my posts",
   title: 'All Categories'
 }
+
 ---
 
 <PageLayout {meta}>

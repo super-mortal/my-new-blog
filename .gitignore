@@ -15,6 +15,9 @@ dist/
 !.vscode/extensions.json
 !.vscode/*.code-snippets
 
+### Runtime logs ###
+logs/
+
 # Code workspace files
 *.code-workspace
 

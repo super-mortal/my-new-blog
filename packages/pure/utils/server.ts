@@ -1,4 +1,4 @@
-import {type CollectionEntry, type CollectionKey, getCollection} from 'astro:content'
+import {type CollectionEntry, getCollection} from 'astro:content'
 
 type BlogEntry = CollectionEntry<'blog'>
 /** Helper for functions that only accept blog entries. */

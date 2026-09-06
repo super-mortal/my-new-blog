@@ -10,10 +10,6 @@ export const prerender = true
 const categories = skillsData.categories
 const headings = categories.map((c) => ({ depth: 2 as const, slug: c.id, text: c.title }))
 
-const meta = {
-  description: 'Skills and tools I have published on GitHub',
-  title: 'Skills'
-}
 ---
 
 <PageLayout title='Skills' {headings} comment={false}>
