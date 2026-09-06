@@ -234,6 +234,16 @@ Vite 8 + Rolldown 不识别 `import type { ... }`、`type Props = ...`、`interf
 
 ---
 
+### Vercel pagefind 失败 + DEP0190 修复
+
+- `packages/pure/index.ts`：spawn 改为本地 `node_modules/.bin/pagefind(.cmd)`，args 用**单字符串拼接 + shell:true**（避免 Node 24 `DEP0190`，DEP0190 只对 `spawn(cmd, [args], {shell:true})` 数组拼接触发，纯字符串不触发）。同时不再依赖 `npx -y pagefind` 下载步骤，构建更稳定
+- `package.json`：钉 `@pagefind/linux-x64@1.5.2` 到 dependencies
+  - pagefind@1.5.2 的 platform binary 通过 `optionalDependencies` 分发，Windows dev 机器 lockfile 里只有 `@pagefind/windows-x64`，没有 linux-x64
+  - Vercel 在 Linux x64 上 `npm ci` 严格按 lockfile 安装，不会装 `linux-x64`，导致 pagefind 启动时 `resolveBinary` 找不到二进制 → "platform linux-x64 is not yet a supported architecture"
+  - 显式钉到 dependencies 强制安装
+
+---
+
 ### 部署警告清理 + oxc-parser Linux binding 钉死
 
 `astro check` 与 `npm run build` 的告警清理：
