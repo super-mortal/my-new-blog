@@ -1,8 +1,10 @@
 ---
 import {Timeline} from 'astro-pure/user'
+import AiBotCard from '@/components/about/AiBotCard.astro'
 import PageLayout from '@/layouts/CommonPage.astro'
 
 const headings = [
+  { depth: 2, slug: 'ai-bot', text: 'AI Bot' },
   { depth: 2, slug: 'hobbies', text: '目标' },
   { depth: 2, slug: 'about-blog', text: '关于博客' }
 ]
@@ -19,6 +21,9 @@ const headings = [
     除写代码外，我也喜欢研究如何让 AI 真正进入日常工作流——比如搭建带个人知识库的智能助手、自动化工作流，以及让 Agent
     可靠地处理真实任务。未来会继续在 AI 与基础设施融合的方向上精进，保持探索、沉淀与输出。
   </p>
+
+  {/* AI bot */}
+  <AiBotCard />
 
   {/* general-talk */}
   <h2 id='hobbies'>目标</h2>
@@ -39,6 +44,10 @@ const headings = [
   <p>博客历史:</p>
   <Timeline
     events={[
+      {
+        date: '2026-09-06',
+        content: '博客全面升级：支持自定义 slug，增加 AI 支持等'
+      },
       {
         date: '2026-03-17',
         content: '新博客成立，使用Astro框架astro-theme-pure模板构建'

@@ -1,0 +1,47 @@
+---
+import {Button} from 'astro-pure/user'
+---
+<section
+  class='not-prose mt-8 flex flex-col gap-3 rounded-xl border bg-card/30 p-4 sm:p-5'
+  aria-label='AI Bot'
+>
+  <div class='flex items-start gap-3'>
+    <div
+      class='flex size-10 shrink-0 items-center justify-center rounded-lg border bg-muted text-primary'
+      aria-hidden='true'
+    >
+      <svg
+        xmlns='http://www.w3.org/2000/svg'
+        width='22'
+        height='22'
+        viewBox='0 0 24 24'
+        fill='none'
+        stroke='currentColor'
+        stroke-width='1.8'
+        stroke-linecap='round'
+        stroke-linejoin='round'
+      >
+        <path d='M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z' />
+      </svg>
+    </div>
+    <div class='flex min-w-0 flex-1 flex-col gap-1'>
+      <h2 id='ai-bot' class='text-lg font-medium'>AI Bot</h2>
+      <p class='text-sm leading-6 text-muted-foreground'>
+        本站提供 AI 辅助支持：如果对某篇文章有疑惑，想深入了解某些细节，或者想反馈建议，都可以去问我的 AI Bot。
+      </p>
+    </div>
+  </div>
+  <p class='text-xs leading-5 text-muted-foreground/80'>
+    反馈时留下你的邮箱，AI 会自动整理问题并向我报告，我稍后会通过邮箱回信给你。
+  </p>
+  <div class='flex justify-end'>
+    <Button
+      as='a'
+      title='去问问我的 AI Bot'
+      href='https://qm.qq.com/q/QegqadxjCS'
+      target='_blank'
+      rel='noopener'
+      variant='ahead'
+    />
+  </div>
+</section>
