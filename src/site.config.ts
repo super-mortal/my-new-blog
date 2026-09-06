@@ -84,7 +84,7 @@ export const theme: ThemeUserConfig = {
       },
       // Privacy Policy link
       {
-        title: '站点地图',
+        title: 'sitemap',
         link: '/sitemap-index.xml',
         pos: 2 // position set to 2 will be appended to copyright line
       }
