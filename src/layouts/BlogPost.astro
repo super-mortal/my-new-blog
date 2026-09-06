@@ -5,10 +5,10 @@ import { type CollectionEntry } from 'astro:content'
 // Plugin styles
 import 'katex/dist/katex.min.css'
 
-import { MediumZoom } from 'astro-pure/advanced'
 import { ArticleBottom, Copyright, RelatedPosts, TOC } from 'astro-pure/components/pages'
 import {getPostSlug, getRelatedPosts} from 'astro-pure/server'
 import config from 'virtual:config'
+import ArticleLightbox from '@/components/ArticleLightbox.astro'
 import BlogPostingJsonLd from '@/components/BlogPostingJsonLd.astro'
 import LocalHero from '@/components/LocalHero.astro'
 import PageLayout from '@/layouts/ContentLayout.astro'
@@ -78,4 +78,4 @@ const relatedPosts = isDraft ? [] : getRelatedPosts(post, posts, 3)
   </Fragment>
 </PageLayout>
 
-{config.integ.mediumZoom.enable && <MediumZoom />}
+{config.integ.mediumZoom.enable && <ArticleLightbox />}

@@ -1,0 +1,233 @@
+---
+---
+
+<article-lightbox aria-hidden='true'></article-lightbox>
+
+<style is:global>
+  .article-lightbox-overlay {
+    position: fixed;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    z-index: 100;
+    background: hsl(var(--background) / 0.92);
+    backdrop-filter: blur(8px);
+    padding: 1rem;
+    overscroll-behavior: contain;
+  }
+
+  .article-lightbox-overlay[hidden] {
+    display: none;
+  }
+
+  .article-lightbox-stage {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex: 1;
+    min-height: 0;
+    width: 100%;
+  }
+
+  .article-lightbox-stage img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+    border-radius: var(--radius);
+    box-shadow: 0 1rem 3rem hsl(var(--foreground) / 0.18);
+  }
+
+  .article-lightbox-controls {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    flex-shrink: 0;
+    border: 1px solid var(--un-default-border-color);
+    border-radius: 999px;
+    background: hsl(var(--muted) / 0.9);
+    padding: 0.4rem 0.7rem;
+  }
+
+  .article-lightbox-controls button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.25rem;
+    height: 2.25rem;
+    border: 1px solid transparent;
+    border-radius: 999px;
+    color: hsl(var(--foreground) / var(--un-text-opacity, 1));
+    background: transparent;
+    cursor: pointer;
+    transition:
+      background-color 0.2s ease,
+      border-color 0.2s ease;
+  }
+
+  .article-lightbox-controls button:hover {
+    background: hsl(var(--card) / 1);
+    border-color: var(--un-default-border-color);
+  }
+
+  .article-lightbox-controls button:focus-visible {
+    outline: 2px solid hsl(var(--primary) / 1);
+    outline-offset: 2px;
+  }
+
+  .article-lightbox-count {
+    min-width: 3.5rem;
+    text-align: center;
+    font-size: 0.8125rem;
+    font-variant-numeric: tabular-nums;
+    color: hsl(var(--muted-foreground) / var(--un-text-opacity, 1));
+  }
+
+  .article-lightbox-close {
+    width: 2.25rem;
+    height: 2.25rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 999px;
+    color: hsl(var(--foreground) / var(--un-text-opacity, 1));
+    background: hsl(var(--muted) / 0.9);
+    border: 1px solid var(--un-default-border-color);
+    cursor: pointer;
+    position: fixed;
+    top: 1rem;
+    right: 1rem;
+    z-index: 101;
+    transition:
+      background-color 0.2s ease,
+      border-color 0.2s ease;
+  }
+
+  .article-lightbox-close:hover {
+    background: hsl(var(--card) / 1);
+  }
+
+  @media (max-width: 640px) {
+    .article-lightbox-controls {
+      width: 100%;
+      justify-content: space-between;
+    }
+
+    .article-lightbox-count {
+      min-width: auto;
+    }
+  }
+</style>
+
+<script>
+  class ArticleLightbox extends HTMLElement {
+    overlay?: HTMLDivElement
+    images: HTMLImageElement[] = []
+    current = 0
+
+    connectedCallback() {
+      this.overlay = document.createElement('div')
+      this.overlay.className = 'article-lightbox-overlay'
+      this.overlay.setAttribute('role', 'dialog')
+      this.overlay.setAttribute('aria-modal', 'true')
+      this.overlay.setAttribute('aria-label', '图片放大查看')
+      this.overlay.hidden = true
+      this.overlay.innerHTML = `
+        <div class="article-lightbox-stage">
+          <img class="article-lightbox-image" alt="" />
+        </div>
+        <div class="article-lightbox-controls">
+          <button type="button" data-action="prev" aria-label="上一张">
+            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+          </button>
+          <span class="article-lightbox-count">0 / 0</span>
+          <button type="button" data-action="next" aria-label="下一张">
+            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
+          </button>
+        </div>
+        <button type="button" class="article-lightbox-close" aria-label="关闭">
+          <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+        </button>`
+      document.body.appendChild(this.overlay)
+
+      this.overlay.addEventListener('click', (event) => {
+        if (event.target === this.overlay) this.close()
+      })
+      this.overlay.querySelector('[data-action="prev"]')?.addEventListener('click', () => this.goTo(this.current - 1))
+      this.overlay.querySelector('[data-action="next"]')?.addEventListener('click', () => this.goTo(this.current + 1))
+      this.overlay.querySelector('.article-lightbox-close')?.addEventListener('click', () => this.close())
+
+      document.addEventListener('click', this.handleImageClick)
+      document.addEventListener('keydown', this.handleKeydown)
+    }
+
+    disconnectedCallback() {
+      document.removeEventListener('click', this.handleImageClick)
+      document.removeEventListener('keydown', this.handleKeydown)
+      document.body.style.overflow = ''
+      this.overlay?.remove()
+    }
+
+    handleImageClick = (event: MouseEvent) => {
+      const target = event.target as HTMLElement
+      const image = target.closest<HTMLImageElement>('#content img.zoomable')
+      if (!image) return
+      event.preventDefault()
+      this.images = Array.from(document.querySelectorAll<HTMLImageElement>('#content img.zoomable'))
+      this.open(this.images.indexOf(image))
+    }
+
+    handleKeydown = (event: KeyboardEvent) => {
+      if (!this.overlay || this.overlay.hidden) return
+      if (event.key === 'Escape') {
+        event.preventDefault()
+        this.close()
+      } else if (event.key === 'ArrowLeft') {
+        event.preventDefault()
+        this.goTo(this.current - 1)
+      } else if (event.key === 'ArrowRight') {
+        event.preventDefault()
+        this.goTo(this.current + 1)
+      }
+    }
+
+    open(index: number) {
+      if (!this.overlay || this.images.length === 0) return
+      this.current = Math.max(0, Math.min(index, this.images.length - 1))
+      this.syncImage()
+      this.overlay.hidden = false
+      document.body.style.overflow = 'hidden'
+      this.overlay.querySelector<HTMLButtonElement>('.article-lightbox-close')?.focus()
+    }
+
+    close() {
+      if (!this.overlay) return
+      this.overlay.hidden = true
+      document.body.style.overflow = ''
+    }
+
+    goTo(index: number) {
+      if (this.images.length === 0) return
+      this.current = (index + this.images.length) % this.images.length
+      this.syncImage()
+    }
+
+    syncImage() {
+      if (!this.overlay) return
+      const image = this.images[this.current]
+      const target = this.overlay.querySelector<HTMLImageElement>('.article-lightbox-image')
+      const counter = this.overlay.querySelector<HTMLElement>('.article-lightbox-count')
+      if (!image || !target || !counter) return
+
+      const src = image.currentSrc || image.src
+      target.src = src
+      target.alt = image.alt || ''
+      counter.textContent = `${this.current + 1} / ${this.images.length}`
+    }
+  }
+
+  if (!customElements.get('article-lightbox')) customElements.define('article-lightbox', ArticleLightbox)
+</script>

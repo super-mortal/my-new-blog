@@ -3,6 +3,7 @@
     "name": "DeepSeek Harness Guide",
     "category": "文档站",
     "description": "DeepSeek Harness (dsh) 实战蓝皮书：E-INK 风格 VitePress 文档站，6 种语言",
+    "image": "deepseek-harness-guide.png",
     "links": [
       {
         "type": "site",

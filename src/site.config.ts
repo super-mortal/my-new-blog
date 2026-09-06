@@ -18,7 +18,7 @@ export const theme: ThemeUserConfig = {
   sections: {
     about: true,
     projects: true,
-    skills: true,
+    skills: false,
     categories: true,
     posts: true,
     education: true,

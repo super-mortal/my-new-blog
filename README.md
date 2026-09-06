@@ -9,6 +9,41 @@
 
 ---
 
+## 与上游完整对比
+
+| 维度 | 上游 astro-theme-pure | 本仓库 supermortal.cn |
+|---|---|---|
+| 核心版本 | Astro 5.x / Vite 6.x | Astro 7.2.10 / Vite 8（Rolldown） |
+| 文章 URL | 文件/目录名决定 | frontmatter `slug` 决定，目录可自由中文化 |
+| 文章目录 | 拼音/英文目录 | 中文语义化目录，改名不影响 URL |
+| 分类体系 | 多分类 | 单值 `category` + 多 `tags` |
+| 全文搜索 | Pagefind，构建时容易失败 | 修复 Pagefind 路径问题，搜索页预渲染 |
+| 相关推荐 | 固定在文章底部 | 底部右侧独立卡片，等高、最多 3 篇 |
+| 文章顶部图标 | MingCute 填充图标 | 本地 Lucide 描边 SVG |
+| 二维码 / 图片放大 | CDN 加载 | 本地化到 `public/scripts/` |
+| 评论系统 | Waline | 已移除 |
+| 阅读进度条 | 无 | 自研 3px（文章页滚动进度） |
+| 页脚 | Astro & Pure theme powered | AI 机器人对话入口 + sitemap |
+| AI 机器人 | 无 | OneBot QQ 机器人，带个人知识库 |
+| OG 图 | 静态图 | 构建时 satori 自动生成，按 slug 命名 |
+| 内容板块 | 固定 | `site.config.ts` 的 `sections` 可开关 |
+| 路由 | 含 `/terms` | 移除 `/terms`，改为站点地图 |
+| 404 / RSS / Sitemap | 基础实现 | 404 推荐、RSS 全文开关、sitemap lastmod |
+
+### AI 机器人对话（重点）
+
+页脚右侧的 `Chat with my AI Bot` 是进入作者 OneBot QQ 机器人对话的入口：
+
+- 点击跳转：`https://qm.qq.com/q/QegqadxjCS`
+- 机器人基于 **OneBot 协议** 接入 QQ
+- 机器人内置作者知识库，访客可以直接向它提问博客内容、项目经验、部署教程等
+- 入口与实现：`packages/pure/components/basic/Footer.astro`
+  - 显示文本：`Chat with my AI Bot`
+  - 跳转链接：`href='https://qm.qq.com/q/QegqadxjCS'`
+  - 新窗口打开：`target='_blank'`
+
+未来如需切换入口（如微信公众号、Telegram、Web 聊天室），只需修改 Footer 中的 `href` 与显示文本即可。
+
 ## 相对上游的变更
 
 ### 引擎升级
@@ -106,8 +141,9 @@ Vite 8 + Rolldown 不识别 `import type { ... }`、`type Props = ...`、`interf
 
 ### 加阅读进度条
 
+- 上游 astro-theme-pure **没有**阅读进度条，本仓库自研并放到了文章页布局里
 - 位置：`src/layouts/ContentLayout.astro`（只在博客文章页生效）
-- 样式：`fixed top-0 left-0 h-0.5 bg-primary transition-[width] duration-75`
+- 样式：`fixed top-0 left-0 h-[3px] bg-primary transition-[width] duration-75`
 - 行为：跟踪 `article` 元素的滚动百分比，宽度从 0% 到 100%
 - 性能：`requestAnimationFrame` 节流，passive scroll 监听
 - Astro 路由切换：监听 `astro:page-load` 重新计算
@@ -163,16 +199,18 @@ Vite 8 + Rolldown 不识别 `import type { ... }`、`type Props = ...`、`interf
 
 ### Projects 板块恢复
 
+- **板块开关**: `site.config.ts` 的 `sections.projects`，设为 `false` 可整块隐藏（当前为 `true`）
 - 上游自带的 `/projects` 页面此前被移除，本次恢复：路由 `src/pages/projects/index.astro`，数据源 `public/projects.json`（改这个文件即可增删项目，无需动代码）
 - 项目卡片复用 `src/components/projects/ProjectSection.astro`（上游原组件，本次修了两个遗留 bug：图标映射 `github-circle` 不存在改为 `github`；glob 正则 `avif.webp` 笔误改为 `avif,webp`）
-- 首页: About 区块之后新增 **Projects** 区块（展示前 4 个项目 + "More projects" 按钮），紧邻其后的就是 Categories 区块
+- 首页: About 区块之后新增 **Projects** 区块（当前 projects.json 只有 2 个项目，全部展示 + "More projects" 按钮），紧邻其后的就是 Categories 区块
 - Header 菜单: 加"项目"入口（关于左边），完整顺序: 博客 / 归档 / 分类 / 标签 / 友链 / 项目 / 关于
-- 项目卡片支持配图: `projects.json` 里加 `"image": "文件名.png"`，图片放 `src/assets/projects/`，卡片右侧显示渐隐配图（Astro 自动压缩为 webp）；不加 `image` 则纯文字卡片。当前两个示例配图为 sharp 生成的占位图，可直接替换
+- 项目卡片支持配图: `projects.json` 里加 `"image": "文件名.png"`，图片放 `src/assets/projects/`，卡片右侧显示渐隐配图（Astro 自动压缩为 webp）；不加 `image` 则纯文字卡片。当前 DeepSeek Harness Guide 与 Link Navigator 均已配置配图
 
 ---
 
 ### Skills 板块 + 板块开关
 
+- **当前状态**: Skills 内容已清空（`public/skills.json` 为 `{"categories": []}`），`sections.skills` 已设为 `false`，首页板块不再展示；等后续补齐内容后把开关改回 `true`、重新填充 JSON 即可
 - **Skills 定位**: 展示发布在 GitHub 的技能/工具，卡片 + 外链跳转（无站内详情页，简化后的方案）
 - 数据: `public/skills.json`（与 projects 同模式，改 JSON 即增删，无需动代码）
 - 字段: `name` / `description` / `image`（可选，图放 `src/assets/skills/`，卡片右侧渐隐展示）/ `links`（github/site/doc/release；站内路径当前页跳转，外部新标签）
@@ -182,7 +220,7 @@ Vite 8 + Rolldown 不识别 `import type { ... }`、`type Props = ...`、`interf
 - 组件: `src/components/skills/SkillSection.astro`（样式与 ProjectSection 一致）
 
 - **卡片分类徽章**: projects.json / skills.json 均支持可选 `category` 字段，卡片右上角显示圆角徽章（border + bg-background/80 + backdrop-blur，跟随主题亮暗色），不填则不显示
-- **首页板块顺序调整**: Skills 从 Categories 后移至 **Posts 之后**，现为 About → Projects → Categories → Posts → Skills → Education
+- **首页板块顺序调整**: 默认 About → Projects → Categories → Posts → Education（Skills 当前已关闭；开启后位于 Posts 之后）
 
 ---
 
@@ -200,7 +238,7 @@ Vite 8 + Rolldown 不识别 `import type { ... }`、`type Props = ...`、`interf
 
 ### 首页板块顺序
 
-- Skills 从 Categories 后移至 **Posts 之后**：About → Projects → Categories → Posts → Skills → Education
+- 默认顺序：About → Projects → Categories → Posts → Education；Skills 板块当前已关闭，开启后位于 Posts 之后
 
 ---
 
@@ -209,21 +247,6 @@ Vite 8 + Rolldown 不识别 `import type { ... }`、`type Props = ...`、`interf
 - **移除友链历史记录**: 删除友链页"友链历史记录"时间线；配置 `site.config.ts` 的 `integ.links.logbook` 字段删除；schema（`packages/pure/schemas/links.ts`）中 logbook 改为可选（默认 []，兼容旧配置）
 - **失效友链逻辑**: 纯手动维护——`public/links.json` 第 2 组 `inactive-links`，把失效/违规友链从第 1 组移到第 2 组即可，页面用折叠块展示，无自动检测
 - **Skills 分类化**: `public/skills.json` 改为分组结构 `{ categories: [{ id, title, skills: [...] }]`，`/skills` 页按分类显示 h2 标题（进 TOC），首页取全部分类前 4 个展示
-
----
-
-### 新文章: DeepSeek Harness 蓝皮书
-
-- 发布 `/blog/deepseek-harness-guide`：介绍开源项目 [DeepSeekHarnessGuide](https://github.com/super-mortal/DeepSeekHarnessGuide)（dsh 实战指南，VitePress + E-INK 风格 + 6 语言）
-- 文章配图 3 张（项目 README 同款截图），存放于文章目录内（`src/content/blog/deepseek-harness-guide/`，frontmatter 用 `./xxx.png` 相对引用——注意 Astro 内容集合中 `../../assets` 跨目录引用会 ImageNotFound，同目录最稳）
-- 项目卡片同步加入 `projects.json`（文档站分类，含 GitHub/在线地址/博客介绍 doc 链接），首页 Projects 区块自动展示
-
----
-
-### 文章精简 + 封面移除
-
-- `/blog/deepseek-harness-guide` 按需求精简：移除封面 heroImage，正文压缩为"README 式简介"（一张首页截图 + 简介 + 快速开始 + 仓库链接）
-- 未配 heroImage 的文章自动使用全站默认 OG 分享卡（`config.socialCard`）
 
 ---
 
@@ -285,7 +308,7 @@ src/
 │   ├── IndividualPage.astro
 ├── pages/
 │   ├── index.astro
-│   ├── about/, archives/, blog/, links/, search/, tags/, terms/
+│   ├── about/, archives/, blog/, links/, search/, tags/
 │   ├── categories/             # 新增
 │   │   ├── index.astro
 │   │   └── [category]/[...page].astro
