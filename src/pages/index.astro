@@ -23,10 +23,11 @@ const MAX_POSTS = 10
 const allPosts = await getBlogCollection()
 const allPostsByDate = sortMDByDate(allPosts).slice(0, MAX_POSTS)
 const categoriesWithCount = getUniqueCategoriesWithCount(allPosts)
-const latestProjects = projectsAll.slice(0, 2)
-const latestSkills = skillsAll.categories
-  .flatMap((cat: { skills: { name: string; description: string; image?: string; category?: string; links: { type: string; href: string }[] }[] }) => cat.skills)
-  .slice(0, 4)
+const allSkills = skillsAll.categories.flatMap(
+  (cat: {
+    skills: { name: string; description: string; image?: string; category?: string; links: { type: string; href: string }[] }[]
+  }) => cat.skills
+)
 const sections = config.sections ?? {}
 
 const imagePath = config.logo.src
@@ -110,8 +111,16 @@ if (!images[imagePath])
 
       {sections.projects !== false && (
       <Section title='Projects'>
-        <ProjectSection projects={latestProjects} />
-        <Button title='More projects' class='w-fit self-end' href='/projects' variant='ahead' />
+        <ProjectSection projects={projectsAll} maxItems={2} />
+        {projectsAll.length > 2 ? (
+          <button
+            id='projects-more-btn'
+            class='group inline-flex items-center gap-x-1 rounded-lg bg-muted border px-2 py-1 text-sm text-muted-foreground transition-all hover:bg-card w-fit self-end'
+          >查看更多项目</button
+          >
+        ) : (
+          <Button title='More projects' class='w-fit self-end' href='/projects' variant='ahead' />
+        )}
       </Section>
       )}
 
@@ -147,10 +156,18 @@ if (!images[imagePath])
         )
       }
 
-      {sections.skills !== false && latestSkills.length > 0 && (
+      {sections.skills !== false && allSkills.length > 0 && (
       <Section title='Skills'>
-        <SkillSection skills={latestSkills} />
-        <Button title='More skills' class='w-fit self-end' href='/skills' variant='ahead' />
+        <SkillSection skills={allSkills} maxItems={2} />
+        {allSkills.length > 2 ? (
+          <button
+            id='skills-more-btn'
+            class='group inline-flex items-center gap-x-1 rounded-lg bg-muted border px-2 py-1 text-sm text-muted-foreground transition-all hover:bg-card w-fit self-end'
+          >查看更多技能</button
+          >
+        ) : (
+          <Button title='More skills' class='w-fit self-end' href='/skills' variant='ahead' />
+        )}
       </Section>
       )}
 
@@ -216,4 +233,27 @@ if (!images[imagePath])
     </div>
     <Quote class='mt-12' />
   </main>
+
+  <script>
+    function initMoreToggle(
+      buttonId: string,
+      itemSelector: string,
+      moreText: string,
+      collapseText: string
+    ) {
+      const button = document.getElementById(buttonId)
+      if (!button) return
+      button.addEventListener('click', () => {
+        const expanded = button.dataset.expanded === 'true'
+        document.querySelectorAll(itemSelector).forEach((item) => {
+          item.classList.toggle('hidden', !expanded)
+        })
+        button.dataset.expanded = String(!expanded)
+        button.textContent = expanded ? moreText : collapseText
+      })
+    }
+
+    initMoreToggle('projects-more-btn', '.project-item-more', '查看更多项目', '收起')
+    initMoreToggle('skills-more-btn', '.skill-item-more', '查看更多技能', '收起')
+  </script>
 </PageLayout>
