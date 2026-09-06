@@ -6,10 +6,11 @@ import { type CollectionEntry } from 'astro:content'
 import 'katex/dist/katex.min.css'
 
 import { MediumZoom } from 'astro-pure/advanced'
-import { ArticleBottom, Copyright, Hero, RelatedPosts, TOC } from 'astro-pure/components/pages'
-import { getRelatedPosts } from 'astro-pure/server'
+import { ArticleBottom, Copyright, RelatedPosts, TOC } from 'astro-pure/components/pages'
+import {getPostSlug, getRelatedPosts} from 'astro-pure/server'
 import config from 'virtual:config'
 import BlogPostingJsonLd from '@/components/BlogPostingJsonLd.astro'
+import LocalHero from '@/components/LocalHero.astro'
 import PageLayout from '@/layouts/ContentLayout.astro'
 
 interface Props {
@@ -37,8 +38,8 @@ const socialImage = heroImage
 const articleDate = updatedDate?.toISOString() ?? publishDate.toISOString()
 const primaryColor = data.heroImage?.color ?? 'hsl(var(--primary) / var(--un-text-opacity))'
 
-// Related: 4 cards by default, shown when not a draft
-const relatedPosts = isDraft ? [] : getRelatedPosts(post, posts, 4)
+// Related: 3 posts in bottom-right column (height-matched with copyright card), shown when not a draft
+const relatedPosts = isDraft ? [] : getRelatedPosts(post, posts, 3)
 ---
 
 <PageLayout
@@ -50,7 +51,7 @@ const relatedPosts = isDraft ? [] : getRelatedPosts(post, posts, 4)
     slot='head'
     title={title}
     description={description}
-    slug={id}
+    slug={getPostSlug(post)}
     publishDate={publishDate}
     updatedDate={updatedDate}
     image={socialImage}
@@ -59,20 +60,22 @@ const relatedPosts = isDraft ? [] : getRelatedPosts(post, posts, 4)
   />
   {!!headings.length && <TOC {headings} slot='sidebar' />}
 
-  <Hero {data} {remarkPluginFrontmatter} slot='header' />
+  <LocalHero {data} {remarkPluginFrontmatter} slot='header' />
 
   <slot />
 
   <Fragment slot='bottom'>
     {/* Copyright */}
-    <Copyright {data} />
-    {/* Article navigation: previous / next */}
-    <ArticleBottom collections={posts} {id} class='mt-3 sm:mt-6' />
-    {/* Related: tag-overlap based, shown only when not draft */}
-    {!isDraft && <RelatedPosts current={post} related={relatedPosts} class='mt-3 sm:mt-6' />}
+    <Copyright {data} class='h-full' />
   </Fragment>
 
-  <slot name='bottom-sidebar' slot='bottom-sidebar' />
+  {/* Article navigation: full-width row below the copyright / related grid */}
+  <ArticleBottom slot='bottom-nav' collections={posts} {id} />
+
+  <Fragment slot='bottom-sidebar'>
+    {/* Related posts: independent component at bottom-right, next to copyright */}
+    {!isDraft && relatedPosts.length > 0 && <RelatedPosts current={post} related={relatedPosts} />}
+  </Fragment>
 </PageLayout>
 
 {config.integ.mediumZoom.enable && <MediumZoom />}

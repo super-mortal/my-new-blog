@@ -1,6 +1,6 @@
 import {spawn} from 'node:child_process'
-import { existsSync, readFileSync } from 'node:fs'
-import {dirname, join, relative} from 'node:path'
+import { existsSync, readFileSync, readdirSync } from 'node:fs'
+import {join, relative} from 'node:path'
 import {fileURLToPath} from 'node:url'
 // Astro
 import type { AstroIntegration } from 'astro'
@@ -31,11 +31,14 @@ export default function AstroPureIntegration(opts: UserInputConfig): AstroIntegr
   const integrations: AstroIntegration[] = []
   const remarkPlugins: RemarkPlugins = []
   const rehypePlugins: RehypePlugins = []
+  let projectRoot = process.cwd()
 
   return {
     name: 'astro-pure',
     hooks: {
       'astro:config:setup': async ({ config, updateConfig }) => {
+        // Pagefind 装在宿主项目根目录，而不是本包目录
+        projectRoot = fileURLToPath(config.root)
         const userConfig = parseWithFriendlyErrors(
           UserConfigSchema,
           opts,
@@ -59,8 +62,29 @@ export default function AstroPureIntegration(opts: UserInputConfig): AstroIntegr
               if (m) {
                 const slug = decodeURIComponent(m[1])
                 const blogDir = join(process.cwd(), "src", "content", "blog")
-                const candidates = [join(blogDir, slug + ".md"), join(blogDir, slug, "index.md")]
-                for (const p of candidates) {
+                const candidates = [
+                  join(blogDir, slug + ".md"),
+                  join(blogDir, slug + ".mdx"),
+                  join(blogDir, slug, "index.md"),
+                  join(blogDir, slug, "index.mdx")
+                ]
+                const found = [...candidates]
+                // URL slug 来自 frontmatter slug 时, 文件夹名可能不同: 全量反查一次
+                if (!candidates.some((p) => existsSync(p))) {
+                  try {
+                    for (const entry of readdirSync(blogDir, { recursive: true, withFileTypes: true })) {
+                      if (!entry.isFile() || !/\.(md|mdx)$/.test(entry.name)) continue
+                      const p = join(entry.parentPath, entry.name)
+                      const md = readFileSync(p, "utf8")
+                      const fm = md.match(/^---\r?\n([\s\S]*?)\r?\n---/)?.[1] ?? ""
+                      const fmSlug = fm.match(/^slug:\s*['"]?([^'"\s]+)['"]?\s*$/m)?.[1]
+                      if (fmSlug === slug) found.push(p)
+                    }
+                  } catch {
+                    /* ignore */
+                  }
+                }
+                for (const p of found) {
                   if (!existsSync(p)) continue
                   try {
                     const md = readFileSync(p, "utf8")
@@ -147,7 +171,7 @@ export default function AstroPureIntegration(opts: UserInputConfig): AstroIntegr
       'astro:build:done': ({ dir }) => {
         if (!opts.integ.pagefind) return
         const targetDir = fileURLToPath(dir)
-        const cwd = dirname(fileURLToPath(import.meta.url))
+        const cwd = projectRoot
         const relativeDir = relative(cwd, targetDir)
         return new Promise<void>((resolve) => {
           // Use local pagefind from node_modules/.bin (no npx).

@@ -435,7 +435,8 @@ async function main() {
     const raw = await readFile(file, 'utf8')
     const fm = parseFrontmatter(raw)
     if (fm.draft) { console.log('   skip ' + d.name + ' (draft)'); continue }
-    await generateOne(d.name, fm, site, colors)
+    const outSlug = fm.slug || d.name
+    await generateOne(outSlug, fm, site, colors)
     count++
   }
   console.log('Done. ' + count + ' images in public/og/')

@@ -16,6 +16,7 @@ const { post, detailed = false, class: className } = Astro.props
 const { id, data } = post
 const { remarkPluginFrontmatter } = await render(post)
 const postDate = data.updatedDate ?? data.publishDate
+const postUrl = (data as { slug?: string }).slug || id
 ---
 
 <li
@@ -31,7 +32,7 @@ const postDate = data.updatedDate ?? data.publishDate
       detailed && 'max-sm:px-4 sm:py-5',
       detailed && data.heroImage && 'max-md:pt-24'
     )}
-    href={`/blog/${id}`}
+    href={`/blog/${postUrl}`}
     data-astro-prefetch
   >
     {

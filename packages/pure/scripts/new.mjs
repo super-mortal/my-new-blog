@@ -112,6 +112,7 @@ export default function main(args) {
 
   let content = `---
 title: '${postTitle}'
+slug: '${getPostSlug(postTitle)}'
 description: 'Write your description here.'
 publishDate: '${getDate()}'
 `

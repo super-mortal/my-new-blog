@@ -1,4 +1,4 @@
-import {getBlogCollection, sortMDByDate} from "astro-pure/server"
+import {getBlogCollection, getPostSlug, sortMDByDate} from "astro-pure/server"
 import config from "@/site-config"
 
 export const GET = async () => {
@@ -8,7 +8,7 @@ export const GET = async () => {
 
   const items = await Promise.all(
     allPostsByDate.map(async (post) => {
-      const link = baseUrl + "blog/" + post.id + "/"
+      const link = baseUrl + "blog/" + getPostSlug(post) + "/"
       let contentHtml
       if (rssFullText) {
         try {

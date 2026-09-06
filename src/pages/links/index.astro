@@ -1,7 +1,6 @@
 ---
 import links from 'public/links.json'
 
-import {Collapse} from 'astro-pure/user'
 import config from 'virtual:config'
 import PageLayout from '@/layouts/CommonPage.astro'
 import FriendList from '@/components/links/FriendList.astro'
@@ -19,11 +18,8 @@ const linksConf = config.integ.links
   <p>这里是我的朋友们，欢迎互相访问交流</p>
   <h2 id='common-links'>我的朋友</h2>
   <FriendList list={friends[0]} />
-  <Collapse title='失效友链'>
-    <FriendList list={friends[1]} />
-  </Collapse>
   <h2 id='special-links'>特殊链接</h2>
-  <FriendList list={friends[2]} />
+  <FriendList list={friends[1]} />
 
   <h2 id='apply-links'>申请友链</h2>
   <p>申请友链前请先在自己网站添加本站友链，请使用以下信息：（点击复制）：</p>

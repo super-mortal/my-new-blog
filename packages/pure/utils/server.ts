@@ -6,6 +6,11 @@ type Collections = BlogEntry[]
 
 export const prod = import.meta.env.PROD
 
+/** URL slug for a blog entry: explicit frontmatter slug, falling back to content id. */
+export function getPostSlug(post: BlogEntry): string {
+  return post.data.slug || post.id
+}
+
 /** Note: this function filters out draft posts based on the environment */
 export async function getBlogCollection(): Promise<BlogEntry[]> {
   return await getCollection('blog', (entry: BlogEntry) => {

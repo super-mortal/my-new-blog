@@ -2,6 +2,7 @@
 import { type CollectionEntry } from 'astro:content'
 
 import { cn } from '../../utils'
+import { getPostSlug } from '../../utils/server'
 
 type Props = {
   current: CollectionEntry<'blog'>
@@ -23,7 +24,7 @@ function sharedTags(post: CollectionEntry<'blog'>): string[] {
   related.length > 0 && (
     <section
       class={cn(
-        'mt-6 sm:mt-8 rounded-xl border bg-card/30 p-3 sm:p-4',
+        'h-full flex flex-col rounded-xl border bg-card/30 p-3 sm:p-4',
         className
       )}
       aria-label='Related posts'
@@ -33,13 +34,13 @@ function sharedTags(post: CollectionEntry<'blog'>): string[] {
         相关推荐
         <span class='text-xs text-muted-foreground/60'>({related.length})</span>
       </h2>
-      <ul class='grid grid-cols-1 gap-1.5 sm:grid-cols-2'>
+      <ul class='grid grid-cols-1 gap-1.5 content-start'>
         {related.map((post) => {
           const shared = sharedTags(post)
           return (
             <li>
               <a
-                href={`/blog/${post.id}`}
+                href={`/blog/${getPostSlug(post)}`}
                 class='group flex items-baseline gap-x-2 rounded-md px-2 py-1.5 transition-colors hover:bg-muted/60'
                 data-astro-prefetch
               >
