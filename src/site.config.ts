@@ -13,7 +13,7 @@ export const theme: ThemeUserConfig = {
   /** The default social card image for your site which should be a path to an image in the `public/` directory. */
   socialCard: 'https://supermortal.cn/images/social-card.png',
   /** RSS feed: true = full text, false (default) = description only */
-  rssFullText: false,
+  rssFullText: true,
   /** 首页板块开关: 设为 false 整块隐藏（含导航入口逻辑由菜单自行控制） */
   sections: {
     about: true,
