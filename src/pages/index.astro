@@ -1,7 +1,6 @@
 ---
 import {Image} from 'astro:assets'
 
-import {Quote} from 'astro-pure/advanced'
 import {PostPreview} from 'astro-pure/components/pages'
 import {getBlogCollection, getUniqueCategoriesWithCount, sortMDByDate} from 'astro-pure/server'
 import {Button, Card, Icon, Label} from 'astro-pure/user'
@@ -54,6 +53,8 @@ if (!images[imagePath])
         src={images[imagePath]()}
         alt={config.logo.alt || 'Profile'}
         class='h-28 w-auto rounded-full border p-1'
+        width={160}
+        height={160}
         loading='eager'
         fetchpriority='high'
       />
@@ -231,7 +232,6 @@ if (!images[imagePath])
       </Section>
       )}
     </div>
-    <Quote class='mt-12' />
   </main>
 
   <script>
