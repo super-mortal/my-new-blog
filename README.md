@@ -234,6 +234,23 @@ Vite 8 + Rolldown 不识别 `import type { ... }`、`type Props = ...`、`interf
 
 ---
 
+### 部署警告清理 + oxc-parser Linux binding 钉死
+
+`astro check` 与 `npm run build` 的告警清理：
+
+- `content.config.ts`：从 `astro:content` 导入 zod 改为从 `astro/zod` 直接导入（Astro 7 弃用前一种方式）
+- `packages/pure/schemas/favicon.ts`：`code: z.ZodIssueCode.custom` 改为 `code: 'custom'`（zod v4 弃用 `ZodIssueCode`）
+- 清理无用 import：Footer / server.ts / index / about / categories / links / projects / skills 多处的 6133/6192 警告
+- `pagefind spawn` 仍会触发 Node 24 的 `DEP0190` 弃用警告（无害，只是 Node 24 的安全提示），不动
+
+**Vercel 部署 `MODULE_NOT_FOUND` 修复：**
+
+- 根因：oxc-parser@0.131.0 的 platform binding 通过 `optionalDependencies` 分发，Vercel Linux 环境（glibc）下 `npm ci` 没正确安装 `@oxc-parser/binding-linux-x64-gnu`，导致 jiti 加载 `uno.config.ts` 时 `bindings.js` 找不到对应二进制
+- 解法：`package.json` 显式添加 `@oxc-parser/binding-linux-x64-gnu` 和 `@oxc-parser/binding-linux-x64-musl` 到 `dependencies`，强制 Vercel 安装 Linux binding（Windows/Mac 开发机不会装，避免本地依赖膨胀）
+- 本地 Windows 上 `npm install --force` 用于生成 lockfile 条目
+
+---
+
 ### 工程小改
 
 - 修 `<!- prettier-ignore -->` 非法 HTML 注释（`packages/pure/components/basic/Footer.astro`、`advanced/GithubCard.astro`）
