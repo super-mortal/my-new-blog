@@ -6,7 +6,6 @@ import PageLayout from '@/layouts/CommonPage.astro'
 import FriendList from '@/components/links/FriendList.astro'
 
 const headings = [
-  { depth: 2, slug: 'common-links', text: '普通友链' },
   { depth: 2, slug: 'apply-links', text: '申请友链' }
 ]
 
@@ -16,8 +15,6 @@ const linksConf = config.integ.links
 
 <PageLayout title='Links' {headings} comment>
   <p>这里是我的朋友们，欢迎互相访问交流</p>
-  <h2 id='common-links'>我的朋友</h2>
-  <FriendList list={friends[0]} />
   <h2 id='special-links'>特殊链接</h2>
   <FriendList list={friends[1]} />
 
