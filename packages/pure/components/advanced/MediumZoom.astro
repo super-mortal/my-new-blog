@@ -11,7 +11,7 @@ const { selector = config.integ.mediumZoom.selector, background = 'hsl(var(--bac
   Astro.props
 ---
 
-<script is:inline src={`${config.npmCDN}/medium-zoom/dist/pure/medium-zoom.min.umd.js`}></script>
+<script is:inline src='/scripts/medium-zoom.min.umd.js'></script>
 <script is:inline define:vars={{ selector, background }}>
   mediumZoom(selector, { background })
 </script>

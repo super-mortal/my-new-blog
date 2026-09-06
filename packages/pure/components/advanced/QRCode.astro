@@ -1,12 +1,10 @@
 ---
-import config from 'virtual:config'
-
 const { content, class: className, ...props } = Astro.props
 ---
 
 <div id='qrcode-container' class={className} {...props}></div>
 
-<script is:inline src={`${config.npmCDN}/qrcodejs/qrcode.min.js`}></script>
+<script is:inline src='/scripts/qrcode.min.js'></script>
 <script is:inline define:vars={{ content }}>
   const renderContent = content ?? window.location.href
   // Load qrcode
