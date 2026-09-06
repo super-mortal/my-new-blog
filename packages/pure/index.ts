@@ -150,10 +150,18 @@ export default function AstroPureIntegration(opts: UserInputConfig): AstroIntegr
         const cwd = dirname(fileURLToPath(import.meta.url))
         const relativeDir = relative(cwd, targetDir)
         return new Promise<void>((resolve) => {
-          spawn('npx', ['-y', 'pagefind', '--site', relativeDir], {
+          // Use local pagefind from node_modules/.bin (no npx).
+          // Pass args as a single command string with shell:true — avoids DEP0190
+          // (which fires on Node 24 when spawn(cmd, [args], {shell:true}) concatenates args).
+          const localBin =
+            process.platform === 'win32'
+              ? join(cwd, 'node_modules', '.bin', 'pagefind.cmd')
+              : join(cwd, 'node_modules', '.bin', 'pagefind')
+          spawn(`"${localBin}" --site "${relativeDir}"`, {
             stdio: 'inherit',
+            cwd,
             shell: true,
-            cwd
+            windowsHide: true
           }).on('close', () => resolve())
         })
       }
