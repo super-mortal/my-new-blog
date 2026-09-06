@@ -6,17 +6,18 @@ import TOCHeading from './TOCHeading.astro'
 
 interface Props {
   headings: MarkdownHeading[]
+  title?: string
   class?: string
   id?: string
 }
 
-const { headings, class: className, ...props } = Astro.props
+const { headings, title, class: className, ...props } = Astro.props
 
 const toc = generateToc(headings)
 ---
 
 <toc-heading class={className} {...props}>
-  <h2 class='font-medium'>TABLE OF CONTENTS</h2>
+  <h2 class='font-medium'>{title ?? 'TABLE OF CONTENTS'}</h2>
   <ul class='mt-4'>
     {toc.map((heading) => <TOCHeading heading={heading} />)}
   </ul>

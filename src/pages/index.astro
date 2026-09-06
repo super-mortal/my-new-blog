@@ -10,7 +10,7 @@ import ProjectSection from '@/components/projects/ProjectSection.astro'
 import Section from '@/components/home/Section.astro'
 import SkillLayout from '@/components/home/SkillLayout.astro'
 import SkillSection from '@/components/skills/SkillSection.astro'
-import config from '@/site-config'
+import config, {homepage} from '@/site-config'
 import projectsAll from '../../public/projects.json'
 import skillsAll from '../../public/skills.json'
 
@@ -112,8 +112,8 @@ if (!images[imagePath])
 
       {sections.projects !== false && (
       <Section title='Projects'>
-        <ProjectSection projects={projectsAll} maxItems={2} />
-        {projectsAll.length > 2 ? (
+        <ProjectSection projects={projectsAll} maxItems={homepage.projectsMax} />
+        {projectsAll.length > homepage.projectsMax ? (
           <button
             id='projects-more-btn'
             class='group inline-flex items-center gap-x-1 rounded-lg bg-muted border px-2 py-1 text-sm text-muted-foreground transition-all hover:bg-card w-fit self-end'
@@ -159,8 +159,8 @@ if (!images[imagePath])
 
       {sections.skills !== false && allSkills.length > 0 && (
       <Section title='Skills'>
-        <SkillSection skills={allSkills} maxItems={2} />
-        {allSkills.length > 2 ? (
+        <SkillSection skills={allSkills} maxItems={homepage.skillsMax} />
+        {allSkills.length > homepage.skillsMax ? (
           <button
             id='skills-more-btn'
             class='group inline-flex items-center gap-x-1 rounded-lg bg-muted border px-2 py-1 text-sm text-muted-foreground transition-all hover:bg-card w-fit self-end'

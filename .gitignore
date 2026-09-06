@@ -40,6 +40,5 @@ node_modules/
 old_blog
 ignore.*
 bunfig.toml
-/全部文章/
 /src/content/blog/test.*
 /test/

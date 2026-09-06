@@ -166,6 +166,14 @@ export const integ: IntegrationUserConfig = {
   }
 }
 
+/** 首页板块展示数量配置（开放博客，允许使用者自由调整） */
+export const homepage = {
+  /** 首页 Projects 板块最多展示多少个项目 */
+  projectsMax: 2,
+  /** 首页 Skills 板块最多展示多少个技能 */
+  skillsMax: 2
+}
+
 const config = { ...theme, integ } as Config
 export default config
 
