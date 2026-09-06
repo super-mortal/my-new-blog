@@ -3,7 +3,14 @@
     {
       "id_name": "cf-links",
       "desc": "Common links included in circle friends",
-      "link_list": []
+      "link_list": [
+        {
+          "name": "爱发电",
+          "intro": "为爱发电，支持我更好的创作",
+          "link": "https://ifdian.net/a/supermortal",
+          "avatar": "https://q1.qlogo.cn/g?b=qq&nk=2169702639&s=640"
+        }
+      ]
     },
     {
       "id_name": "special-links",
